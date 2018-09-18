@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     mapClients = MappingSum.putTime(mapClients, startTime);*/
 
                     //------PRIMES-------
-                    createPrimeArray = PrimeUtils.randomIntegers(40_000_000);
+                    createPrimeArray = PrimeUtils.randomIntegers(20_000_000);
                     long startTime = System.nanoTime();
                     mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
                     mapClients = MappingPrimes.putTime(mapClients, startTime);
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
      * Compare two different tables and find
      * witch device has been of the network
      * Because of the api this could take and 1 minute
-     * to final discover the device that has been send off
+     * to final discover the device that has been off the network
      */
     private void deletePeersOnDisconnection(){
         try {
