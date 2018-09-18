@@ -10,14 +10,17 @@ public class ChunkPrimes {
     private static int[][] chunkPrimeArray(int[] array, int chunkSize) {
         int numOfChunks = (int)Math.ceil((double)array.length / chunkSize);
         int[][] output = new int[numOfChunks][];
+        try {
+            for (int i = 0; i < numOfChunks; ++i) {
+                int start = i * chunkSize;
+                int length = Math.min(array.length - start, chunkSize);
 
-        for(int i = 0; i < numOfChunks; ++i) {
-            int start = i * chunkSize;
-            int length = Math.min(array.length - start, chunkSize);
-
-            int[] temp = new int[length];
-            System.arraycopy(array, start, temp, 0, length);
-            output[i] = temp;
+                int[] temp = new int[length];
+                System.arraycopy(array, start, temp, 0, length);
+                output[i] = temp;
+            }
+        }catch (OutOfMemoryError om){
+            om.printStackTrace();
         }
         return output;
     }
@@ -32,10 +35,13 @@ public class ChunkPrimes {
     public static int [] onePrimeArray(int[] array, int chunkSize, int clientNumber){
         int [][] output = chunkPrimeArray(array,chunkSize);
         int [] finalArray = new int[0];
-
-        for(int i = clientNumber; i <= clientNumber; i++){
-            finalArray = new int[output[i].length];
-            System.arraycopy(output[i], 0, finalArray, 0, output[i].length);
+        try {
+            for (int i = clientNumber; i <= clientNumber; i++) {
+                finalArray = new int[output[i].length];
+                System.arraycopy(output[i], 0, finalArray, 0, output[i].length);
+            }
+        }catch (NullPointerException | OutOfMemoryError no){
+            no.printStackTrace();
         }
         return finalArray;
     }

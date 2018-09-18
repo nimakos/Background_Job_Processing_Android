@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     mapClients = MappingSum.putTime(mapClients, startTime);*/
 
                     //------PRIMES-------
-                    createPrimeArray = PrimeUtils.randomIntegers(1_000_000);
+                    createPrimeArray = PrimeUtils.randomIntegers(40_000_000);
                     long startTime = System.nanoTime();
                     mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
                     mapClients = MappingPrimes.putTime(mapClients, startTime);
