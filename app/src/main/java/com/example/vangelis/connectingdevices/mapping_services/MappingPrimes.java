@@ -59,7 +59,7 @@ public class MappingPrimes extends Service {
      * @return The long result from the calculation
      */
     public static long efficientCalculation(int [] arr){
-        String messageForLong = "Parallel sum of %,d numbers is %d.";
+        String messageForLong = "Parallel sum of %,d prime numbers is %d.";
         final long[] clientResult = new long[1];
         TimingUtils.timeOp(new Op() {
             @SuppressLint("DefaultLocale")

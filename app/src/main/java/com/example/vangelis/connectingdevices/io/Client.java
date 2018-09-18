@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
+import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;
 import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
 import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 
@@ -22,7 +23,6 @@ public class Client implements Runnable {
     private String hostAdd;
     private int serverPort;
     private MainActivity context;
-    private static final int SEND_DEVICE_MAC_TO_SERVER = 4;
 
     public Client(InetAddress hostAddress, int serverPort, MainActivity context){
         this.context = context;

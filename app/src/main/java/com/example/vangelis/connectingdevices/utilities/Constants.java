@@ -15,6 +15,7 @@ public class Constants {
     public static final int SEND_DEVICE_MAC_TO_SERVER = 2;
     public static final int SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY = 3;
     public static final int SEND_ARRAY_TO_SERVER_EFFICIENTLY = 4;
+    public static WifiP2pDevice[] deviceArray;
     //------------------------------PARALLELISM-------------------------------------
     public static Map<String, ClientModel> mapClients = new HashMap<>();
     public static int result = 0;
@@ -23,5 +24,4 @@ public class Constants {
     public static String information = "Connected Devices:";
     public static int clientCounter = 0;
     public static boolean hasSendMacAddress = false;
-    public static WifiP2pDevice[] deviceArray;
 }
