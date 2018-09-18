@@ -14,13 +14,12 @@ import com.example.vangelis.connectingdevices.model.ClientModel;
 import com.example.vangelis.connectingdevices.times.Op;
 import com.example.vangelis.connectingdevices.times.TimingUtils;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
 public class MappingSum extends Service {
 
-    public static Map<String, ClientModel> map;
+    public static double [] arrayToCalculate;
 
     /**
      * Create the array for processing and putting it into the hasMap for each client of hashMap
@@ -55,46 +54,36 @@ public class MappingSum extends Service {
         return mp;
     }
 
+
     /**
-     * This is where all the calculations are been done for each client and measuring the time
-     * @param mp The initial hashMap
-     * @param ip The ip for each client in order to compare
-     * @return The final hashMap with the time taken to do the job ONLY, and the result for each client
+     * Calculate and measure the time
+     * @param arr The array to be calculated
+     * @return The double result from the calculation
      */
-    public static Map<String, ClientModel> configResult(Map<String, ClientModel> mp, String ip){
-        Iterator<Map.Entry<String, ClientModel>> it = mp.entrySet().iterator();
-        String message = "Parallel sum of %,d numbers is %,.4f.";
-        while (it.hasNext()) {
-            Map.Entry<String, ClientModel> pair = it.next();
-            if(pair.getKey().equals(ip)){
-                final double[] clientResult = new double[1];
-                //compare times
-                TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        double [] array = pair.getValue().getChunkedArray();
-                        clientResult[0] = ExecuteSum.arraySumParallel(array); //doing the forkJoin
-                        return (String.format(message, array.length, clientResult[0]));
-                    }
-                });
-                pair.getValue().setResultFromSumArray(clientResult[0]);
-                pair.getValue().setHasCompleteTheJob(true);
+    public static double efficientCalculation(double [] arr){
+        String messageForLong = "Parallel sum of %,d numbers is %,.4f.";
+        final double[] clientResult = new double[1];
+        TimingUtils.timeOp(new Op() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public String runOp() {
+                clientResult[0] = ExecuteSum.arraySumParallel(arr);
+                return (String.format(messageForLong, arr.length, clientResult[0]));
             }
-        }
-        return mp;
+        });
+        return clientResult[0];
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            String ip = intent.getStringExtra("Ip");
-            Map<String, ClientModel> mapping =  configResult(map, ip); //do the job
+            double result = efficientCalculation(arrayToCalculate);
 
             //pass the result back
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
-            bundle.putSerializable("message", (Serializable) mapping);
+            bundle.putDouble("message", result);
             receiver.send(1234, bundle);
 
         }catch (NullPointerException np){
