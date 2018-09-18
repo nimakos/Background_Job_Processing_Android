@@ -13,13 +13,13 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.example.vangelis.connectingdevices.MainActivity.clientCounter;
-import static com.example.vangelis.connectingdevices.MainActivity.deviceAddress;
-import static com.example.vangelis.connectingdevices.MainActivity.deviceArray;
-import static com.example.vangelis.connectingdevices.MainActivity.hasSendMacAddress;
-import static com.example.vangelis.connectingdevices.MainActivity.information;
-import static com.example.vangelis.connectingdevices.MainActivity.mapClients;
-import static com.example.vangelis.connectingdevices.MainActivity.readWrites;
+import static com.example.vangelis.connectingdevices.utilities.Constants.clientCounter;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceArray;
+import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.information;
+import static com.example.vangelis.connectingdevices.utilities.Constants.mapClients;
+import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 
 /**
  * Server creates a socket (ServerSocket) which distributes

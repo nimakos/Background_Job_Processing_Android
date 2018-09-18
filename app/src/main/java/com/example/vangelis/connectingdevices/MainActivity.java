@@ -28,13 +28,13 @@ import com.example.vangelis.connectingdevices.io.Server;
 import com.example.vangelis.connectingdevices.mapping_services.MappingPrimes;
 import com.example.vangelis.connectingdevices.model.ClientModel;
 import com.example.vangelis.connectingdevices.network.WiFiDirectBroadcastReceiver;
+import com.example.vangelis.connectingdevices.utilities.Constants;
 import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,26 +48,14 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     public TextView read_msg_box, connectionStatus, connectionStatus2;
     EditText writeMsg;
-
     WifiManager wifiManager;
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;  //For carrying data from one activity to another
-
     List<WifiP2pDevice> peers = new ArrayList<>();
     String[] deviceNameArray;
-    public static WifiP2pDevice[] deviceArray;
-    public static final int SERVER_PORT = 46528;
-
-    //------------------------------PARALLELISM-------------------------------------
-    public static Map<String, ClientModel> mapClients = new HashMap<>();
-    public static int result = 0;
-    public static List<ReadWrite> readWrites = new ArrayList<>();
-    public static List<String> deviceAddress = new ArrayList<>();
-    public static String information = "Connected Devices:";
-    public static int clientCounter = 0;
-    public static boolean hasSendMacAddress = false;
+    private static final int SERVER_PORT = 46528;
 
 
     @SuppressLint("SetTextI18n")
@@ -90,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver =  new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            deviceAddress.clear();
-            deviceAddress.add(intent.getStringExtra("address"));
+            Constants.deviceAddress.clear();
+            Constants.deviceAddress.add(intent.getStringExtra("address"));
         }
     };
 
@@ -125,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Connection with the chosen device from the list using mChannel (Client Side)
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            final WifiP2pDevice device = deviceArray[position];
+            final WifiP2pDevice device = Constants.deviceArray[position];
             WifiP2pConfig config = new WifiP2pConfig();
             config.deviceAddress = device.deviceAddress; //αποθηκευουμε στο config την διέυθυνση (ip) της εκάστοτε συσκεύης
 
@@ -147,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             String msg = writeMsg.getText().toString();
             try{
                 new Thread(() -> {
-                    for(ReadWrite i : readWrites){
+                    for(ReadWrite i : Constants.readWrites){
                         i.writeObject(CHAT_MESSAGE, msg);
                     }
                 }).start();
@@ -169,11 +157,11 @@ public class MainActivity extends AppCompatActivity {
                 //int[] createPrimeArray = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
                 int [] createPrimeArray = PrimeUtils.randomIntegers(20_000_000);
                 long startTime = System.nanoTime();
-                mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
-                mapClients = MappingPrimes.putTime(mapClients, startTime);
-                for (ReadWrite i : readWrites) {
+                Constants.mapClients = MappingPrimes.putPrimeArray(Constants.mapClients, createPrimeArray);
+                Constants.mapClients = MappingPrimes.putTime(Constants.mapClients, startTime);
+                for (ReadWrite i : Constants.readWrites) {
                     try {
-                        for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
+                        for (Map.Entry<String, ClientModel> pair : Constants.mapClients.entrySet()){
                             if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
                                 i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getPrimeChunkedArray());
                                 break;
@@ -252,12 +240,12 @@ public class MainActivity extends AppCompatActivity {
                 peers.addAll(peerList.getDeviceList());
 
                 deviceNameArray = new String[peerList.getDeviceList().size()];
-                deviceArray = new WifiP2pDevice[peerList.getDeviceList().size()];
+                Constants.deviceArray = new WifiP2pDevice[peerList.getDeviceList().size()];
                 int index = 0;
 
                 for (WifiP2pDevice device : peerList.getDeviceList()) {
                     deviceNameArray[index] = device.deviceName + " - " + device.deviceAddress; //save only name and address in array of Strings
-                    deviceArray[index] = device; //save all the objects (devices) with their characteristics in array type of WifiP2pDeviceList
+                    Constants.deviceArray[index] = device; //save all the objects (devices) with their characteristics in array type of WifiP2pDeviceList
                     index++;
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, deviceNameArray);
@@ -266,14 +254,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (peers.size() == 0) {
                 Toast.makeText(getApplicationContext(), "No Device Found", Toast.LENGTH_SHORT).show();
-                mapClients.clear();
-                readWrites.clear();
+                Constants.mapClients.clear();
+                Constants.readWrites.clear();
                 connectionStatus.setText("");
                 connectionStatus2.setText("");
-                information = "Connected Devices:";
-                clientCounter = 0;
-                result = 0;
-                hasSendMacAddress = false;
+                Constants.information = "Connected Devices:";
+                Constants.clientCounter = 0;
+                Constants.result = 0;
+                Constants.hasSendMacAddress = false;
                 return;
             }
             deletePeersOnDisconnection();
@@ -316,24 +304,24 @@ public class MainActivity extends AppCompatActivity {
     private void deletePeersOnDisconnection(){
         try {
             int counter;
-            if (mapClients.size() > deviceArray.length && deviceArray.length != 0) {
-                Iterator<Map.Entry<String, ClientModel>> mapClientIterator = mapClients.entrySet().iterator();
+            if (Constants.mapClients.size() > Constants.deviceArray.length && Constants.deviceArray.length != 0) {
+                Iterator<Map.Entry<String, ClientModel>> mapClientIterator = Constants.mapClients.entrySet().iterator();
                 outer:
                 while(mapClientIterator.hasNext()){
                     Map.Entry<String, ClientModel> i = mapClientIterator.next();
                     counter = 0;
-                    for (WifiP2pDevice device : deviceArray) {
+                    for (WifiP2pDevice device : Constants.deviceArray) {
                         if (i.getValue().getDeviceMacAddress() != null) {
                             if (!i.getValue().getDeviceMacAddress().equals(device.deviceAddress)) {
                                 counter++; //εαν έχουν μετρηθεί οι συσκεύες και δεν έχει βρεθεί η συσκεύη στην κανονική λίστα τότε διεγραψέ την και από το προσωρινό μας HasList
-                                if (counter == deviceArray.length) { //εαν ισχυει η συσκεύη δεν βρεθηκε
+                                if (counter == Constants.deviceArray.length) { //εαν ισχυει η συσκεύη δεν βρεθηκε
                                     mapClientIterator.remove(); //και θα διαγραφει απο την λίστα μας
-                                    Iterator<ReadWrite> readWriteIterator = readWrites.iterator();
+                                    Iterator<ReadWrite> readWriteIterator = Constants.readWrites.iterator();
                                     while(readWriteIterator.hasNext()){
                                         ReadWrite k = readWriteIterator.next();
                                         if(k.clientSocket.getInetAddress().getHostAddress().equals(i.getValue().getClientIp())){
                                             readWriteIterator.remove();
-                                            result = 0;
+                                            Constants.result = 0;
                                             break outer;
                                         }
                                     }

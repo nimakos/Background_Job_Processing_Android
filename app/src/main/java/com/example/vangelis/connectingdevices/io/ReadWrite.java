@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.MainActivity.deviceAddress;
-import static com.example.vangelis.connectingdevices.MainActivity.hasSendMacAddress;
-import static com.example.vangelis.connectingdevices.MainActivity.mapClients;
-import static com.example.vangelis.connectingdevices.MainActivity.readWrites;
-import static com.example.vangelis.connectingdevices.MainActivity.result;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.mapClients;
+import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
+import static com.example.vangelis.connectingdevices.utilities.Constants.result;
 import static com.example.vangelis.connectingdevices.utilities.Constants.CHAT_MESSAGE;
 import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_ARRAY_TO_SERVER_EFFICIENTLY;
 import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;

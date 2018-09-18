@@ -8,8 +8,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
-import static com.example.vangelis.connectingdevices.MainActivity.deviceAddress;
-import static com.example.vangelis.connectingdevices.MainActivity.readWrites;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 
 /**
  * Accepting the request from the Server, the client
