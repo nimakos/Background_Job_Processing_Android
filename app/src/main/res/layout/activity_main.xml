@@ -163,7 +163,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_weight="1"
-                android:text="DO"
+                android:text="CALCULATE"
                 android:visibility="invisible"
                 tools:layout_editor_absoluteX="251dp"
                 tools:layout_editor_absoluteY="447dp" />
