@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/connectionStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connection Status"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/connectionStatus2"
+            android:layout_width="match_parent"
+            android:layout_height="152dp"
+            android:text="IP"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+
+        <Button
+            android:id="@+id/onOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
+            android:text="OPEN WIFI"
+            tools:layout_editor_absoluteX="30dp"
+            tools:layout_editor_absoluteY="75dp" />
+
+        <Button
+            android:id="@+id/discover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="60dp"
+            android:layout_marginRight="60dp"
+            android:text="discover"
+            tools:layout_editor_absoluteX="243dp"
+            tools:layout_editor_absoluteY="75dp" />
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="132dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/peerListView"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:background="@android:color/holo_orange_light"
+                tools:layout_editor_absoluteY="172dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/readMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="153dp"
+            tools:layout_editor_absoluteY="392dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/sendButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="12dp"
+                android:layout_weight="1"
+                android:text="Send"
+                tools:layout_editor_absoluteX="251dp"
+                tools:layout_editor_absoluteY="447dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/writeMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteY="450dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/doSomething"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:text="DO"
+                android:visibility="invisible"
+                tools:layout_editor_absoluteX="251dp"
+                tools:layout_editor_absoluteY="447dp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
