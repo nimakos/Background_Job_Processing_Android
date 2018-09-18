@@ -69,15 +69,6 @@ public class MainActivity extends AppCompatActivity {
     public static int clientCounter = 0;
     public static boolean hasSendMacAddress = false;
 
-    //----------SUMS-------
-    //double[] createArray = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
-    //double[] createArray;
-
-
-    //----------PRIMES-----
-    //int[] createPrimeArray = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    int[] createPrimeArray;
-
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -169,38 +160,56 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //do the calculations
-        dataMining.setOnClickListener(view -> {
-            try {
-                new Thread(() -> {
-                    //--------SUM-------
-                    //createArray = SumUtils.randomDoubles(100);
-                    /*long startTime = System.nanoTime();
-                    mapClients = MappingSum.putArray(mapClients, createArray);
-                    mapClients = MappingSum.putTime(mapClients, startTime);*/
+        dataMining.setOnClickListener(view -> executePrimeNumbers());
+    }
 
-                    //------PRIMES-------
-                    createPrimeArray = PrimeUtils.randomIntegers(20_000_000);
-                    long startTime = System.nanoTime();
-                    mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
-                    mapClients = MappingPrimes.putTime(mapClients, startTime);
-                    for (ReadWrite i : readWrites) {
-                        try {
-                            for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
-                                if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
-                                    i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getPrimeChunkedArray());
-                                    break;
-                                }
+    private void executePrimeNumbers(){
+        try {
+            new Thread(() -> {
+                //int[] createPrimeArray = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+                int [] createPrimeArray = PrimeUtils.randomIntegers(20_000_000);
+                long startTime = System.nanoTime();
+                mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
+                mapClients = MappingPrimes.putTime(mapClients, startTime);
+                for (ReadWrite i : readWrites) {
+                    try {
+                        for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
+                            if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
+                                i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getPrimeChunkedArray());
+                                break;
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*private void executeSumNumbers(){
+        new Thread(() -> {
+            //double[] createArray = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
+            double[]  createArray = SumUtils.randomDoubles(100);
+            long startTime = System.nanoTime();
+            mapClients = MappingSum.putArray(mapClients, createArray);
+            mapClients = MappingSum.putTime(mapClients, startTime);
+            for (ReadWrite i : readWrites) {
+                try{
+                    for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
+                        if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
+                            i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getChunkedArray());
+                            break;
                         }
                     }
-                }).start();
-            }catch (Exception e){
-                e.printStackTrace();
+                }catch (IOException io){
+                    io.printStackTrace();
+                }
             }
-        });
-    }
+        }).start();
+    }*/
 
     private void initialWork() {
         btnOnOff = findViewById(R.id.onOff);
