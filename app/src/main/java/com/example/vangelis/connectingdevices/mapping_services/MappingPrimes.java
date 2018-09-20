@@ -17,6 +17,8 @@ import com.example.vangelis.connectingdevices.times.TimingUtils;
 import java.util.Iterator;
 import java.util.Map;
 
+import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
+
 
 public class MappingPrimes extends Service {
 
@@ -112,8 +114,7 @@ public class MappingPrimes extends Service {
              ResultReceiver receiver = intent.getParcelableExtra("receiver");
              Bundle bundle = new Bundle();
              bundle.putLong("message", result);
-             receiver.send(1234, bundle);
-
+             receiver.send(PRIME, bundle);
         }catch (NullPointerException np){
             np.printStackTrace();
         }

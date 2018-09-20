@@ -17,7 +17,7 @@ import com.example.vangelis.connectingdevices.times.TimingUtils;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfCalculation;
+import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
 
 public class MappingSum extends Service {
 
@@ -62,7 +62,7 @@ public class MappingSum extends Service {
      * @param arr The array to be calculated
      * @return The double result from the calculation
      */
-    public static double efficientCalculation(double [] arr){
+    public static double efficientCalculation(double [] arr, String kindOfCalculation){
         final double[] clientResult = new double[1];
         switch (kindOfCalculation) {
             case "Serial": {
@@ -109,19 +109,19 @@ public class MappingSum extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            double result = efficientCalculation(arrayToCalculate);
+            String kindOfCalculation = intent.getStringExtra("kindOfCalculation");
+            double result = efficientCalculation(arrayToCalculate, kindOfCalculation);
 
             //pass the result back
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putDouble("message", result);
-            receiver.send(1234, bundle);
+            receiver.send(SUM, bundle);
 
         }catch (NullPointerException np){
             np.printStackTrace();
         }
         return Service.START_STICKY;
-        //return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable

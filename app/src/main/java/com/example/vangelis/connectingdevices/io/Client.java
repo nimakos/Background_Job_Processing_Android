@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
 import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 
 /**
@@ -47,7 +47,7 @@ public class Client implements Runnable {
 
             //sends the device names back to the server after connection established
             for (ReadWrite j : readWrites) {
-                j.writeObject(SEND_DEVICE_MAC_TO_SERVER, deviceAddress);
+                j.writeObject(SEND_DEVICE_MAC_TO_SERVER, deviceMacAddresses);
             }
         }catch (IOException e) {
             if(clientSocket != null){

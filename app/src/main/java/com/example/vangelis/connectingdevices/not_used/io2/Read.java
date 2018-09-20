@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
 import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
 
 public class Read implements Runnable {
@@ -39,8 +39,8 @@ public class Read implements Runnable {
                     case 4:
                         try {
                             List<String> list = (List<String>) oi.readObject();
-                            deviceAddress.clear();
-                            deviceAddress.addAll(list);
+                            deviceMacAddresses.clear();
+                            deviceMacAddresses.addAll(list);
                             hasSendMacAddress = true;
                             break;
                         } catch (ClassNotFoundException e) {

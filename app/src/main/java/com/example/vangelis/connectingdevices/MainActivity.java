@@ -3,7 +3,6 @@ package com.example.vangelis.connectingdevices;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
@@ -16,6 +15,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +28,6 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.example.vangelis.connectingdevices.io.Client;
 import com.example.vangelis.connectingdevices.io.ReadWrite;
@@ -95,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver =  new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Constants.deviceAddress.clear();
-            Constants.deviceAddress.add(intent.getStringExtra("address"));
+            Constants.deviceMacAddresses.clear();
+            Constants.deviceMacAddresses.add(intent.getStringExtra("address"));
         }
     };
 
@@ -178,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
         linear.addView(seekBar);
         linear.addView(text);
         seekBuilder.setView(linear);
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -196,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
         seekBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         seekBuilder.create();
         seekBuilder.show();
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
                             if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
-                                i.writePrimes(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getPrimeChunkedArray(), kindOfCalculation);
+                                i.writePrimes(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getPrimeChunkedArray(), kindOfCalculation, kindOfAlgorithm);
                                 break;
                             }
                         }
@@ -316,6 +313,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create the array fill it up with Doubles
+     * divide it into pieces accordingly of the device number
+     * @param arrayLength The initial array to be divided and calculated
+     */
     private void executeSumOfDoubleNumbers(int arrayLength){
         new Thread(() -> {
             double[] createArray = SumUtils.randomDoubles(arrayLength);
@@ -326,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
                         if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
-                            i.writeDoubles(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getChunkedArray(), kindOfCalculation);
+                            i.writeDoubles(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getChunkedArray(), kindOfCalculation, kindOfAlgorithm);
                             break;
                         }
                     }

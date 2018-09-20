@@ -14,7 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import static com.example.vangelis.connectingdevices.utilities.Constants.clientCounter;
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceAddress;
+import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
 import static com.example.vangelis.connectingdevices.utilities.Constants.deviceArray;
 import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
 import static com.example.vangelis.connectingdevices.utilities.Constants.information;
@@ -87,8 +87,8 @@ public class Server implements Runnable {
         ClientModel clientModel = new ClientModel();
         clientModel.setServerIp(clientSocket);
         clientModel.setClientPort(clientSocket);
-        clientModel.setDeviceMacAddress(deviceArray, deviceAddress);
-        clientModel.setDeviceName(deviceArray, deviceAddress);
+        clientModel.setDeviceMacAddress(deviceArray, deviceMacAddresses);
+        clientModel.setDeviceName(deviceArray, deviceMacAddresses);
         clientModel.setServerPort(clientSocket);
         clientModel.setClientIp(clientSocket);
         int clientPort = clientSocket.getPort();

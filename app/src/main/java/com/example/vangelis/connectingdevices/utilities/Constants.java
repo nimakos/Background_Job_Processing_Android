@@ -21,7 +21,7 @@ public class Constants {
     public static Map<String, ClientModel> mapClients = new HashMap<>();
     public static int result = 0;
     public static List<ReadWrite> readWrites = new ArrayList<>();
-    public static List<String> deviceAddress = new ArrayList<>();
+    public static List<String> deviceMacAddresses = new ArrayList<>();
     public static String information = "Connected Devices:";
     public static int clientCounter = 0;
     public static boolean hasSendMacAddress = false;
@@ -29,4 +29,6 @@ public class Constants {
     public static String kindOfCalculation = null;
     public static String kindOfAlgorithm = null;
     public static int arrayLength = 0;
+    public static final int PRIME = 1;
+    public static final int SUM = 2;
 }
