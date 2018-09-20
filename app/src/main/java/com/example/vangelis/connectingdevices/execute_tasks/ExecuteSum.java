@@ -2,7 +2,9 @@ package com.example.vangelis.connectingdevices.execute_tasks;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import com.example.vangelis.connectingdevices.tasks.ParallelArraySumIntegers;
+
+import com.example.vangelis.connectingdevices.tasks.ConcurrentArraySumDoubles;
+import com.example.vangelis.connectingdevices.tasks.ParallelArraySumDoubles;
 import com.example.vangelis.connectingdevices.utilities.SumUtils;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.DoubleStream;
@@ -45,8 +47,11 @@ public class ExecuteSum {
      * @param numbers The array of doubles
      * @return The hole sum
      */
-    public static Double arraySumParallel(double[] numbers) {
+    public static double arraySumParallel(double[] numbers) {
+        return (FORK_JOIN_POOL.invoke(new ParallelArraySumDoubles(numbers,0,numbers.length-1)));
+    }
 
-        return (FORK_JOIN_POOL.invoke(new ParallelArraySumIntegers(numbers,0,numbers.length-1)));
+    public static double arraySumConcurrent(double [] numbers){
+        return (FORK_JOIN_POOL.invoke(new ConcurrentArraySumDoubles(numbers, 0, numbers.length-1)));
     }
 }

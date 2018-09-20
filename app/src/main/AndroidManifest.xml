@@ -3,39 +3,39 @@
     package="com.example.vangelis.connectingdevices">
 
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_WIFI_STATE"/>
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_WIFI_STATE"/>
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_NETWORK_STATE"/>
+        android:name="android.permission.CHANGE_NETWORK_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.INTERNET"/>
+        android:name="android.permission.INTERNET"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/AppTheme">
+        <service android:name=".mapping_services.MappingPrimes">
 
-        <service
-            android:name=".mapping_services.MappingPrimes">
         </service>
-        <service
-            android:name=".mapping_services.MappingSum">
+        <service android:name=".mapping_services.MappingSum">
+
         </service>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -46,7 +46,5 @@
             </intent-filter>
         </activity>
     </application>
-
-
 
 </manifest>

@@ -27,9 +27,9 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.mapClie
 import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 import static com.example.vangelis.connectingdevices.utilities.Constants.result;
 import static com.example.vangelis.connectingdevices.utilities.Constants.CHAT_MESSAGE;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_ARRAY_TO_SERVER_EFFICIENTLY;
+import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_RESULT_BACK_TO_SERVER;
 import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY;
+import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS;
 
 /**
  * Socket is the endpoint of a two way communication link
@@ -77,23 +77,25 @@ public class ReadWrite implements Runnable {
                         deviceAddress.addAll(list);
                         hasSendMacAddress = true;
                         break;
-                    case SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY: //--------->clients side
+                    case SEND_THE_ARRAY_TO_CLIENTS: //--------->clients side
                         String newIpFromClient = clientSocket.getLocalAddress().getHostName();
-                        int size = objectInputStream.readInt();
-                        int [] intArray = new int[size];
-                        for(int k=0;k<size;k++){
-                            intArray[k]=objectInputStream.readInt();
+                        int arraySize = objectInputStream.readInt();
+                        int [] intArray = new int[arraySize];
+                        for(int k = 0; k < arraySize; k++){
+                            intArray[k] = objectInputStream.readInt();
                         }
+                        String kindOfCalculation = objectInputStream.readUTF();
                         MessageReceiverFromService newReceiver = new MessageReceiverFromService(new Message(newIpFromClient,readWrites));
                         MappingPrimes.arrayToCalculate = intArray;
                         Intent intent = new Intent(context, MappingPrimes.class);
                         intent.putExtra("receiver", newReceiver);
+                        intent.putExtra("kindOfCalculation", kindOfCalculation);
                         context.startService(intent);
                         break;
-                    case SEND_ARRAY_TO_SERVER_EFFICIENTLY: //------------>server side
+                    case SEND_RESULT_BACK_TO_SERVER: //------------>server side
                         String newClientIp = objectInputStream.readUTF();
                         long newResult = objectInputStream.readLong();
-                        finalSetOfMap(mapClients, newClientIp, newResult);
+                        finalSetOfMapForPrimes(mapClients, newClientIp, newResult);
                         break;
                 }
             }
@@ -133,22 +135,44 @@ public class ReadWrite implements Runnable {
         }
     }
 
-    public void write(int b,int[] data) throws IOException
+    public void writePrimes(int jobToDo, int[] data, String kindOfCalculation) throws IOException
     {
-        objectOutputStream.writeByte(b);
+        objectOutputStream.writeByte(jobToDo);
         objectOutputStream.writeInt(data.length);
         for (int aData : data) {
             objectOutputStream.writeInt(aData);
         }
+        objectOutputStream.writeUTF(kindOfCalculation);
         objectOutputStream.flush();
         objectOutputStream.reset();
     }
 
-    public void write(int b,String ip, long result) throws IOException
+    public void writeStringPrimes(int jobToDo, String ip, long result) throws IOException
     {
-        objectOutputStream.writeByte(b);
+        objectOutputStream.writeByte(jobToDo);
         objectOutputStream.writeUTF(ip);
         objectOutputStream.writeLong(result);
+        objectOutputStream.flush();
+        objectOutputStream.reset();
+    }
+
+    public void writeDoubles(int jobToDo, double[] data, String kindOfCalculation) throws IOException
+    {
+        objectOutputStream.writeByte(jobToDo);
+        objectOutputStream.writeInt(data.length);
+        for (double aData : data) {
+            objectOutputStream.writeDouble(aData);
+        }
+        objectOutputStream.writeUTF(kindOfCalculation);
+        objectOutputStream.flush();
+        objectOutputStream.reset();
+    }
+
+    public void writeStringDoubles(int jobToDo, String ip, double result) throws IOException
+    {
+        objectOutputStream.writeByte(jobToDo);
+        objectOutputStream.writeUTF(ip);
+        objectOutputStream.writeDouble(result);
         objectOutputStream.flush();
         objectOutputStream.reset();
     }
@@ -162,7 +186,7 @@ public class ReadWrite implements Runnable {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
-    private void finalSetOfMap(Map<String, ClientModel> mp, String ip, long finalResult){
+    private void finalSetOfMapForPrimes(Map<String, ClientModel> mp, String ip, long finalResult){
         for (Map.Entry<String, ClientModel> pair : mp.entrySet()) {
             if (pair.getKey().equals(ip)) {
                 pair.getValue().setPrimeResultFromSumArray(finalResult);

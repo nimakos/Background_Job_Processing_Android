@@ -7,7 +7,7 @@ import com.example.vangelis.connectingdevices.io.ReadWrite;
 import java.io.IOException;
 import java.util.List;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_ARRAY_TO_SERVER_EFFICIENTLY;
+import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_RESULT_BACK_TO_SERVER;
 
 public class Message {
     private String ipFromClient;
@@ -24,7 +24,7 @@ public class Message {
         new Thread(() -> {
             for(ReadWrite i : readWrites){
                 try {
-                    i.write(SEND_ARRAY_TO_SERVER_EFFICIENTLY, ipFromClient, result); //write the values back to server
+                    i.writeStringPrimes(SEND_RESULT_BACK_TO_SERVER, ipFromClient, result); //write the values back to server
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

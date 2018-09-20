@@ -18,7 +18,7 @@ public class PrimeUtils {
     }
 
     /**
-     * Find if a give number is Prime
+     * Find if a given number is Prime
      * @param n The given number
      * @return The result if is prime or not
      */

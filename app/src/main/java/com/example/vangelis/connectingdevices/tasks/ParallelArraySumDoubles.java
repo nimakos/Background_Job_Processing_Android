@@ -4,13 +4,13 @@ import com.example.vangelis.connectingdevices.utilities.SumUtils;
 import java.util.concurrent.RecursiveTask;
 
 
-public class ParallelArraySumIntegers extends RecursiveTask<Double> {
+public class ParallelArraySumDoubles extends RecursiveTask<Double> {
 
     private static final int PARALLEL_CUTOFF = 1000;
     private double[] numbers;
     private int lowerIndex, upperIndex;
 
-    public ParallelArraySumIntegers(double[] numbers, int lowerIndex, int upperIndex)
+    public ParallelArraySumDoubles(double[] numbers, int lowerIndex, int upperIndex)
     {
         this.numbers = numbers;
         this.lowerIndex = lowerIndex;
@@ -25,8 +25,8 @@ public class ParallelArraySumIntegers extends RecursiveTask<Double> {
             return(SumUtils.arraySum(numbers, lowerIndex, upperIndex));
         } else {
             int middleIndex = lowerIndex + (range/2);
-            ParallelArraySumIntegers leftSummer = new ParallelArraySumIntegers(numbers, lowerIndex, middleIndex);
-            ParallelArraySumIntegers rightSummer = new ParallelArraySumIntegers(numbers, middleIndex+1, upperIndex);
+            ParallelArraySumDoubles leftSummer = new ParallelArraySumDoubles(numbers, lowerIndex, middleIndex);
+            ParallelArraySumDoubles rightSummer = new ParallelArraySumDoubles(numbers, middleIndex+1, upperIndex);
             leftSummer.fork();
             Double rightSum = rightSummer.compute();
             Double leftSum = leftSummer.join();

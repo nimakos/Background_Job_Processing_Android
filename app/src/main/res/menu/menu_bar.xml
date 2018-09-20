@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/calculations"
+        android:title="Select Calculation "/>
+    <item android:id="@+id/algorithms"
+        android:title="Select Algorithm" />
+    <item android:id="@+id/arrayLength"
+        android:title="Select Array Length" />
+</menu>

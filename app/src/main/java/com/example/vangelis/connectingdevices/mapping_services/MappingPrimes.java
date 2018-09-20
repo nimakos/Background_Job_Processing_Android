@@ -17,6 +17,7 @@ import com.example.vangelis.connectingdevices.times.TimingUtils;
 import java.util.Iterator;
 import java.util.Map;
 
+
 public class MappingPrimes extends Service {
 
     public static int [] arrayToCalculate;
@@ -58,24 +59,54 @@ public class MappingPrimes extends Service {
      * @param arr The array to be calculated
      * @return The long result from the calculation
      */
-    public static long efficientCalculation(int [] arr){
-        String messageForLong = "Parallel sum of %,d prime numbers is %d.";
+    public static long efficientCalculation(int [] arr, String kindOfCalculation){
         final long[] clientResult = new long[1];
-        TimingUtils.timeOp(new Op() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public String runOp() {
-                clientResult[0] = ExecutePrimes.arrayOfPrimesSumParallel(arr);
-                return (String.format(messageForLong, arr.length, clientResult[0]));
+        switch (kindOfCalculation){
+            case "Serial": {
+                String messageForLong = "Serial Count of %,d prime numbers is %d.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumSerial(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
             }
-        });
+            case "Concurrent": {
+                String messageForLong = "Concurrent sum of %,d prime numbers is %d.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumConcurrent(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
+            }
+            case "Parallel": {
+                String messageForLong = "Parallel sum of %,d prime numbers is %d.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumParallel(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
+            }
+        }
         return clientResult[0];
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-             long result = efficientCalculation(arrayToCalculate);
+             String kindOfCalculation = intent.getStringExtra("kindOfCalculation");
+             long result = efficientCalculation(arrayToCalculate, kindOfCalculation);
 
              //pass the result back
              ResultReceiver receiver = intent.getParcelableExtra("receiver");

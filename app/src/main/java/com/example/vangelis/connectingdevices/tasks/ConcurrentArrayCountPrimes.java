@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
-public class ConcurrentArraySumPrimes extends RecursiveTask<Long> {
+public class ConcurrentArrayCountPrimes extends RecursiveTask<Long> {
 
     private static final int PARALLEL_CUTOFF = 1000;
     private int[] numbers;
     private int lowerIndex, upperIndex;
 
-    public ConcurrentArraySumPrimes(int[] numbers, int lowerIndex, int upperIndex){
+    public ConcurrentArrayCountPrimes(int[] numbers, int lowerIndex, int upperIndex){
         this.numbers = numbers;
         this.lowerIndex = lowerIndex;
         this.upperIndex = upperIndex;
@@ -25,12 +25,12 @@ public class ConcurrentArraySumPrimes extends RecursiveTask<Long> {
         if (range <= PARALLEL_CUTOFF) {
             return(PrimeUtils.countArrayPrimes(numbers, lowerIndex, upperIndex));
         } else {
-            List<ConcurrentArraySumPrimes> subTasks = new ArrayList<>(createSubTasks());
-            for(ConcurrentArraySumPrimes subTask : subTasks){
+            List<ConcurrentArrayCountPrimes> subTasks = new ArrayList<>(createSubTasks());
+            for(ConcurrentArrayCountPrimes subTask : subTasks){
                 subTask.fork();
             }
             long result = 0;
-            for(ConcurrentArraySumPrimes subTask : subTasks){
+            for(ConcurrentArrayCountPrimes subTask : subTasks){
                 result += subTask.join();
             }
 
@@ -38,13 +38,13 @@ public class ConcurrentArraySumPrimes extends RecursiveTask<Long> {
         }
     }
 
-    private List<ConcurrentArraySumPrimes> createSubTasks(){
+    private List<ConcurrentArrayCountPrimes> createSubTasks(){
         int range = upperIndex - lowerIndex;
         int middleIndex = lowerIndex + (range/2);
-        List<ConcurrentArraySumPrimes> subTasks = new ArrayList<>();
+        List<ConcurrentArrayCountPrimes> subTasks = new ArrayList<>();
 
-        ConcurrentArraySumPrimes subTask1 = new ConcurrentArraySumPrimes(numbers, lowerIndex, middleIndex);
-        ConcurrentArraySumPrimes subTask2 = new ConcurrentArraySumPrimes(numbers, middleIndex + 1, upperIndex);
+        ConcurrentArrayCountPrimes subTask1 = new ConcurrentArrayCountPrimes(numbers, lowerIndex, middleIndex);
+        ConcurrentArrayCountPrimes subTask2 = new ConcurrentArrayCountPrimes(numbers, middleIndex + 1, upperIndex);
 
         subTasks.add(subTask1);
         subTasks.add(subTask2);

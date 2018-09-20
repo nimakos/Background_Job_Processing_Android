@@ -17,6 +17,8 @@ import com.example.vangelis.connectingdevices.times.TimingUtils;
 import java.util.Iterator;
 import java.util.Map;
 
+import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfCalculation;
+
 public class MappingSum extends Service {
 
     public static double [] arrayToCalculate;
@@ -61,16 +63,45 @@ public class MappingSum extends Service {
      * @return The double result from the calculation
      */
     public static double efficientCalculation(double [] arr){
-        String messageForLong = "Parallel sum of %,d numbers is %,.4f.";
         final double[] clientResult = new double[1];
-        TimingUtils.timeOp(new Op() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public String runOp() {
-                clientResult[0] = ExecuteSum.arraySumParallel(arr);
-                return (String.format(messageForLong, arr.length, clientResult[0]));
+        switch (kindOfCalculation) {
+            case "Serial": {
+                String messageForLong = "Serial sum of %,d numbers is %,.4f.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecuteSum.arraySum(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
             }
-        });
+            case "Concurrent": {
+                String messageForLong = "Concurrent sum of %,d numbers is %,.4f.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecuteSum.arraySumConcurrent(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
+            }
+            case "Parallel": {
+                String messageForLong = "Parallel sum of %,d numbers is %,.4f.";
+                TimingUtils.timeOp(new Op() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public String runOp() {
+                        clientResult[0] = ExecuteSum.arraySumParallel(arr);
+                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                    }
+                });
+                break;
+            }
+        }
         return clientResult[0];
     }
 

@@ -3,8 +3,10 @@ package com.example.vangelis.connectingdevices;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -12,35 +14,50 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.example.vangelis.connectingdevices.io.Client;
 import com.example.vangelis.connectingdevices.io.ReadWrite;
 import com.example.vangelis.connectingdevices.io.Server;
 import com.example.vangelis.connectingdevices.mapping_services.MappingPrimes;
+import com.example.vangelis.connectingdevices.mapping_services.MappingSum;
 import com.example.vangelis.connectingdevices.model.ClientModel;
 import com.example.vangelis.connectingdevices.network.WiFiDirectBroadcastReceiver;
 import com.example.vangelis.connectingdevices.utilities.Constants;
 import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
+import com.example.vangelis.connectingdevices.utilities.SumUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.vangelis.connectingdevices.utilities.Constants.CHAT_MESSAGE;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY;
+import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS;
+import static com.example.vangelis.connectingdevices.utilities.Constants.arrayLength;
+import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfAlgorithm;
+import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfCalculation;
+import static com.example.vangelis.connectingdevices.utilities.Constants.mapClients;
+import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     List<WifiP2pDevice> peers = new ArrayList<>();
     String[] deviceNameArray;
     private static final int SERVER_PORT = 46528;
-
+    Toolbar toolbar;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -82,6 +99,108 @@ public class MainActivity extends AppCompatActivity {
             Constants.deviceAddress.add(intent.getStringExtra("address"));
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.calculations){
+            chooseKindOfCalculation();
+            return true;
+        }else if(id == R.id.algorithms){
+            chooseKindOfAlgorithm();
+            return true;
+        }else if(id == R.id.arrayLength){
+            chooseLengthOfTheArray();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void chooseKindOfCalculation(){
+        CharSequence[] values = {" Serial "," Concurrent ", " Parallel" };
+        AlertDialog.Builder calculator = new AlertDialog.Builder(MainActivity.this);
+        calculator.setTitle("Choose Type Of Calculation");
+        calculator.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
+            switch (item){
+                case 0:
+                    kindOfCalculation = "Serial";
+                    break;
+                case 1:
+                    kindOfCalculation = "Concurrent";
+                    break;
+                case 2:
+                    kindOfCalculation = "Parallel";
+                    break;
+            }
+        });
+        calculator.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+        calculator.create();
+        calculator.show();
+    }
+
+    private void chooseKindOfAlgorithm(){
+        CharSequence[] values = {" Sum of Doubles "," Count Primes "};
+        AlertDialog.Builder algorithm = new AlertDialog.Builder(MainActivity.this);
+        algorithm.setTitle("Choose Type Of Calculation");
+        algorithm.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
+            switch (item){
+                case 0:
+                    kindOfAlgorithm = "Doubles";
+                    break;
+                case 1:
+                    kindOfAlgorithm = "Primes";
+                    break;
+            }
+        });
+        algorithm.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+        algorithm.create();
+        algorithm.show();
+    }
+
+    private void chooseLengthOfTheArray(){
+        AlertDialog.Builder seekBuilder = new AlertDialog.Builder(MainActivity.this);
+        seekBuilder.setTitle("Please Choose Array Length");
+        LinearLayout linear = new LinearLayout(this);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        final TextView text = new TextView(this);
+        text.setPadding(300,200,10,10);
+        text.setTypeface(null, Typeface.BOLD);
+        text.setTextSize(25);
+        final SeekBar seekBar = new SeekBar(this);
+        seekBar.setMax(50_000_000);
+        seekBar.setKeyProgressIncrement(1);
+        linear.addView(seekBar);
+        linear.addView(text);
+        seekBuilder.setView(linear);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                text.setText(String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(progress)));
+                arrayLength = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        seekBuilder.create();
+        seekBuilder.show();
+    }
 
     /**
      * The buttons of the main activity
@@ -135,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             String msg = writeMsg.getText().toString();
             try{
                 new Thread(() -> {
-                    for(ReadWrite i : Constants.readWrites){
+                    for(ReadWrite i : readWrites){
                         i.writeObject(CHAT_MESSAGE, msg);
                     }
                 }).start();
@@ -148,22 +267,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //do the calculations
-        dataMining.setOnClickListener(view -> executePrimeNumbers());
+        dataMining.setOnClickListener( v ->{
+            if(kindOfCalculation == null){
+                Toast.makeText(getApplicationContext(), "Please Select Calculation", Toast.LENGTH_LONG).show();
+            }else{
+                if(arrayLength != 0) {
+                    if(kindOfAlgorithm == null){
+                        Toast.makeText(getApplicationContext(), "Please Select Algorithm", Toast.LENGTH_LONG).show();
+                    }else if(kindOfAlgorithm.equals("Primes")){
+                        executePrimeNumbers(arrayLength);
+                    }else if(kindOfAlgorithm.equals("Doubles")){
+                        executeSumOfDoubleNumbers(arrayLength);
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please Choose the length of the array", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
-    private void executePrimeNumbers(){
+    /**
+     * Create the array fill it up with integers
+     * divide it into pieces accordingly of the device number
+     * @param arrayLength The initial array to be divided and calculated
+     */
+    private void executePrimeNumbers(int arrayLength){
         try {
             new Thread(() -> {
-                //int[] createPrimeArray = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-                int [] createPrimeArray = PrimeUtils.randomIntegers(20_000_000);
+                int [] createPrimeArray = PrimeUtils.randomIntegers(arrayLength);
                 long startTime = System.nanoTime();
-                Constants.mapClients = MappingPrimes.putPrimeArray(Constants.mapClients, createPrimeArray);
-                Constants.mapClients = MappingPrimes.putTime(Constants.mapClients, startTime);
-                for (ReadWrite i : Constants.readWrites) {
+                mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
+                mapClients = MappingPrimes.putTime(mapClients, startTime);
+                for (ReadWrite i : readWrites) {
                     try {
-                        for (Map.Entry<String, ClientModel> pair : Constants.mapClients.entrySet()){
+                        for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
                             if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
-                                i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getPrimeChunkedArray());
+                                i.writePrimes(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getPrimeChunkedArray(), kindOfCalculation);
                                 break;
                             }
                         }
@@ -177,10 +316,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*private void executeSumNumbers(){
+    private void executeSumOfDoubleNumbers(int arrayLength){
         new Thread(() -> {
-            //double[] createArray = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
-            double[]  createArray = SumUtils.randomDoubles(100);
+            double[] createArray = SumUtils.randomDoubles(arrayLength);
             long startTime = System.nanoTime();
             mapClients = MappingSum.putArray(mapClients, createArray);
             mapClients = MappingSum.putTime(mapClients, startTime);
@@ -188,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
                         if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
-                            i.write(SEND_THE_ARRAY_TO_CLIENTS_EFFICIENTLY, pair.getValue().getChunkedArray());
+                            i.writeDoubles(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getChunkedArray(), kindOfCalculation);
                             break;
                         }
                     }
@@ -197,9 +335,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
-    }*/
+    }
 
     private void initialWork() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Connecting Devices");
+
         btnOnOff = findViewById(R.id.onOff);
         btnDiscover = findViewById(R.id.discover);
         chatButton = findViewById(R.id.sendButton);
@@ -254,14 +396,15 @@ public class MainActivity extends AppCompatActivity {
 
             if (peers.size() == 0) {
                 Toast.makeText(getApplicationContext(), "No Device Found", Toast.LENGTH_SHORT).show();
-                Constants.mapClients.clear();
-                Constants.readWrites.clear();
+                mapClients.clear();
+                readWrites.clear();
                 connectionStatus.setText("");
                 connectionStatus2.setText("");
                 Constants.information = "Connected Devices:";
                 Constants.clientCounter = 0;
                 Constants.result = 0;
                 Constants.hasSendMacAddress = false;
+                toolbar.setVisibility(View.GONE);
                 return;
             }
             deletePeersOnDisconnection();
@@ -285,11 +428,13 @@ public class MainActivity extends AppCompatActivity {
             if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
                 dataMining.setVisibility(View.VISIBLE);
                 connectionStatus.setText("I am the Server");
+                toolbar.setVisibility(View.VISIBLE);
                 new Thread((new Server(MainActivity.this, SERVER_PORT))).start();
 
                 //client side
             }else if(wifiP2pInfo.groupFormed){
                 connectionStatus.setText("I am the Client");
+                toolbar.setVisibility(View.GONE);
                 new Thread(new Client(groupOwnerAddress, SERVER_PORT, MainActivity.this)).start();
             }
         }
@@ -304,8 +449,8 @@ public class MainActivity extends AppCompatActivity {
     private void deletePeersOnDisconnection(){
         try {
             int counter;
-            if (Constants.mapClients.size() > Constants.deviceArray.length && Constants.deviceArray.length != 0) {
-                Iterator<Map.Entry<String, ClientModel>> mapClientIterator = Constants.mapClients.entrySet().iterator();
+            if (mapClients.size() > Constants.deviceArray.length && Constants.deviceArray.length != 0) {
+                Iterator<Map.Entry<String, ClientModel>> mapClientIterator = mapClients.entrySet().iterator();
                 outer:
                 while(mapClientIterator.hasNext()){
                     Map.Entry<String, ClientModel> i = mapClientIterator.next();
@@ -316,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
                                 counter++; //εαν έχουν μετρηθεί οι συσκεύες και δεν έχει βρεθεί η συσκεύη στην κανονική λίστα τότε διεγραψέ την και από το προσωρινό μας HasList
                                 if (counter == Constants.deviceArray.length) { //εαν ισχυει η συσκεύη δεν βρεθηκε
                                     mapClientIterator.remove(); //και θα διαγραφει απο την λίστα μας
-                                    Iterator<ReadWrite> readWriteIterator = Constants.readWrites.iterator();
+                                    Iterator<ReadWrite> readWriteIterator = readWrites.iterator();
                                     while(readWriteIterator.hasNext()){
                                         ReadWrite k = readWriteIterator.next();
                                         if(k.clientSocket.getInetAddress().getHostAddress().equals(i.getValue().getClientIp())){

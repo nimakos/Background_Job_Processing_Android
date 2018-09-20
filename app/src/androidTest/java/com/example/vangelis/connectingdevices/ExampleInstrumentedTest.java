@@ -92,7 +92,7 @@ public class ExampleInstrumentedTest {
         TimingUtils.timeOp(new Op() {
             @Override
             public String runOp() {
-                long sum = ExecutePrimes.sumArrayPrimes(nums);
+                long sum = ExecutePrimes.arrayOfPrimesSumSerial(nums);
                 return (String.format(message3, number, sum));
             }
         });
