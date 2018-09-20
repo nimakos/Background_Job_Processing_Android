@@ -1,7 +1,13 @@
 package com.example.vangelis.connectingdevices.mapping_services.messages_from_to_service;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.vangelis.connectingdevices.MainActivity;
+import com.example.vangelis.connectingdevices.R;
 import com.example.vangelis.connectingdevices.io.ReadWrite;
 
 import java.io.IOException;
@@ -14,8 +20,10 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
 public class Message {
     private String ipFromClient;
     private List<ReadWrite> readWrites;
+    private MainActivity context;
 
-    public Message(String ipFromClient, List<ReadWrite> readWrites){
+    public Message(String ipFromClient, List<ReadWrite> readWrites, MainActivity context){
+        this.context = context;
         this.readWrites = readWrites;
         this.ipFromClient = ipFromClient;
     }
@@ -23,6 +31,8 @@ public class Message {
     public void displayMessage(int resultCode, Bundle resultData){
         if(resultCode == PRIME) {
             long result = resultData.getLong("message");
+            String holeMessage = resultData.getString("holeMessage");
+            updateTextView(holeMessage);
             new Thread(() -> {
                 for (ReadWrite i : readWrites) {
                     try {
@@ -34,6 +44,8 @@ public class Message {
             }).start();
         }else if(resultCode == SUM){
             double result = resultData.getDouble("message");
+            String holeMessage = resultData.getString("holeMessage");
+            updateTextView(holeMessage);
             new Thread(() -> {
                 for (ReadWrite i : readWrites) {
                     try {
@@ -44,5 +56,12 @@ public class Message {
                 }
             }).start();
         }
+    }
+
+    private void updateTextView(String message){
+        TextView txtView = context.findViewById(R.id.connectionStatus2);
+        txtView.setVisibility(View.VISIBLE);
+        txtView.setTextSize(14);
+        txtView.setText(message);
     }
 }

@@ -23,6 +23,8 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
 public class MappingPrimes extends Service {
 
     public static int [] arrayToCalculate;
+    public static String holleMessage;
+    public static String time;
     /**
      * Create the array for processing and putting it into the hasMap for each client of hashMap
      * @param mp The hashMap
@@ -65,39 +67,45 @@ public class MappingPrimes extends Service {
         final long[] clientResult = new long[1];
         switch (kindOfCalculation){
             case "Serial": {
-                String messageForLong = "Serial Count of %,d prime numbers is %d.";
-                TimingUtils.timeOp(new Op() {
+                String messageForLong = "Serial Count of %,d prime numbers is %d and ";
+                time =  TimingUtils.timeOp(new Op() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public String runOp() {
                         clientResult[0] = ExecutePrimes.arrayOfPrimesSumSerial(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
+                        return (holleMessage);
                     }
                 });
+                holleMessage += "\n" + time;
                 break;
             }
             case "Concurrent": {
-                String messageForLong = "Concurrent sum of %,d prime numbers is %d.";
-                TimingUtils.timeOp(new Op() {
+                String messageForLong = "Concurrent sum of %,d prime numbers is %d and";
+                time = TimingUtils.timeOp(new Op() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public String runOp() {
                         clientResult[0] = ExecutePrimes.arrayOfPrimesSumConcurrent(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
+                        return (holleMessage);
                     }
                 });
+                holleMessage += "\n" + time;
                 break;
             }
             case "Parallel": {
-                String messageForLong = "Parallel sum of %,d prime numbers is %d.";
-                TimingUtils.timeOp(new Op() {
+                String messageForLong = "Parallel sum of %,d prime numbers is %d and";
+                time = TimingUtils.timeOp(new Op() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public String runOp() {
                         clientResult[0] = ExecutePrimes.arrayOfPrimesSumParallel(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
+                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
+                        return (holleMessage);
                     }
                 });
+                holleMessage += "\n" + time;
                 break;
             }
         }
@@ -114,6 +122,7 @@ public class MappingPrimes extends Service {
              ResultReceiver receiver = intent.getParcelableExtra("receiver");
              Bundle bundle = new Bundle();
              bundle.putLong("message", result);
+             bundle.putString("holeMessage", holleMessage);
              receiver.send(PRIME, bundle);
         }catch (NullPointerException np){
             np.printStackTrace();

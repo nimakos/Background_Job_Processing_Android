@@ -93,7 +93,7 @@ public class ReadWrite implements Runnable {
                                     intArray[k] = objectInputStream.readInt();
                                 }
                                 String kindOfCalculation = objectInputStream.readUTF();
-                                MessageReceiverFromService newReceiver = new MessageReceiverFromService(new Message(clientIp, readWrites));
+                                MessageReceiverFromService newReceiver = new MessageReceiverFromService(new Message(clientIp, readWrites, context));
                                 MappingPrimes.arrayToCalculate = intArray;
                                 Intent intent = new Intent(context, MappingPrimes.class);
                                 intent.putExtra("receiver", newReceiver);
@@ -108,7 +108,7 @@ public class ReadWrite implements Runnable {
                                     doubleArray[k] = objectInputStream.readDouble();
                                 }
                                 String kindOfCalculation = objectInputStream.readUTF();
-                                MessageReceiverFromService newReceiver = new MessageReceiverFromService(new Message(clientIp, readWrites));
+                                MessageReceiverFromService newReceiver = new MessageReceiverFromService(new Message(clientIp, readWrites, context));
                                 MappingSum.arrayToCalculate = doubleArray;
                                 Intent intent = new Intent(context, MappingSum.class);
                                 intent.putExtra("receiver", newReceiver);
@@ -126,10 +126,12 @@ public class ReadWrite implements Runnable {
                             case PRIME: {
                                 long primeResult = objectInputStream.readLong();
                                 finalSetOfMapForPrimes(mapClients, clientIp, primeResult);
+                                break;
                             }
                             case SUM: {
                                 double doubleResult = objectInputStream.readDouble();
                                 finalSetOfMapForDoubles(mapClients, clientIp, doubleResult);
+                                break;
                             }
                         }
                         break;
