@@ -12,28 +12,31 @@ public class ExecutePrimes {
 
     /**
      * Sequential sum of Primes without Streams
+     *
      * @param numbers The array of doubles
      * @return The hole sum of primes
      */
-    public static long arrayOfPrimesSumSerial(int[] numbers){
+    public static long arrayOfPrimesSumSerial(int[] numbers) {
         return PrimeUtils.countArrayPrimes(numbers, 0, numbers.length - 1);
     }
 
     /**
      * Parallel sum of Primes without Streams
+     *
      * @param numbers The array of doubles
      * @return The hole sum of primes
      */
     public static long arrayOfPrimesSumParallel(int[] numbers) {
-        return (FORK_JOIN_POOL.invoke(new ParallelArrayCountPrimes(numbers,0,numbers.length-1)));
+        return (FORK_JOIN_POOL.invoke(new ParallelArrayCountPrimes(numbers, 0, numbers.length - 1)));
     }
 
     /**
      * Concurrent sum of Primes without Streams
+     *
      * @param numbers The array of doubles
      * @return The hole sum of primes
      */
     public static long arrayOfPrimesSumConcurrent(int[] numbers) {
-        return (FORK_JOIN_POOL.invoke(new ConcurrentArrayCountPrimes(numbers,0,numbers.length-1)));
+        return (FORK_JOIN_POOL.invoke(new ConcurrentArrayCountPrimes(numbers, 0, numbers.length - 1)));
     }
 }

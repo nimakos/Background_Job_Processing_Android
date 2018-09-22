@@ -83,15 +83,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);  //-------> screen always on
         initialWork();
         exqListener();
-        if(wifiManager.isWifiEnabled()){
+        if (wifiManager.isWifiEnabled()) {
             btnOnOff.setText("CLOSE WIFI");
-        }else{
+        } else {
             btnOnOff.setText("OPEN WIFI");
         }
     }
 
     //the connected device from client side sends back the results(macAddress and deviceName) to its mainActivity
-    BroadcastReceiver broadcastReceiver =  new BroadcastReceiver() {
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Constants.deviceMacAddresses.clear();
@@ -105,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void exqListener() {
         btnOnOff.setOnClickListener(v -> {
-            if(wifiManager.isWifiEnabled()){
+            if (wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(false);
                 btnOnOff.setText("OPEN WIFI");
-            }else{
+            } else {
                 wifiManager.setWifiEnabled(true);
                 btnOnOff.setText("CLOSE WIFI");
             }
@@ -149,34 +149,34 @@ public class MainActivity extends AppCompatActivity {
         //chat Messages
         chatButton.setOnClickListener(v -> {
             String msg = writeMsg.getText().toString();
-            try{
+            try {
                 new Thread(() -> {
-                    for(ReadWrite i : readWrites){
+                    for (ReadWrite i : readWrites) {
                         i.writeObject(CHAT_MESSAGE, msg);
                     }
                 }).start();
                 writeMsg.setText("");
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 final String eString = e.toString();
-                Toast.makeText(getApplicationContext(), eString,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), eString, Toast.LENGTH_LONG).show();
             }
         });
 
         //do the calculations
-        dataMining.setOnClickListener( v ->{
-            if(kindOfCalculation == null){
+        dataMining.setOnClickListener(v -> {
+            if (kindOfCalculation == null) {
                 Toast.makeText(getApplicationContext(), "Please Select Calculation", Toast.LENGTH_LONG).show();
-            }else{
-                if(arrayLength != 0) {
-                    if(kindOfAlgorithm == null){
+            } else {
+                if (arrayLength != 0) {
+                    if (kindOfAlgorithm == null) {
                         Toast.makeText(getApplicationContext(), "Please Select Algorithm", Toast.LENGTH_LONG).show();
-                    }else if(kindOfAlgorithm.equals("Primes")){
+                    } else if (kindOfAlgorithm.equals("Primes")) {
                         executePrimeNumbers(arrayLength);
-                    }else if(kindOfAlgorithm.equals("Doubles")){
+                    } else if (kindOfAlgorithm.equals("Doubles")) {
                         executeSumOfDoubleNumbers(arrayLength);
                     }
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Please Choose the length of the array", Toast.LENGTH_LONG).show();
                 }
             }
@@ -222,19 +222,20 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create the array fill it up with integers
      * divide it into pieces accordingly of the device number
+     *
      * @param arrayLength The initial array to be divided and calculated
      */
-    private void executePrimeNumbers(int arrayLength){
+    private void executePrimeNumbers(int arrayLength) {
         try {
             new Thread(() -> {
-                int [] createPrimeArray = PrimeUtils.randomIntegers(arrayLength);
+                int[] createPrimeArray = PrimeUtils.randomIntegers(arrayLength);
                 long startTime = System.nanoTime();
                 mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
                 mapClients = MappingPrimes.putTime(mapClients, startTime);
                 for (ReadWrite i : readWrites) {
                     try {
-                        for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
-                            if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
+                        for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()) {
+                            if (pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())) {
                                 i.writePrimes(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getPrimeChunkedArray(), kindOfCalculation, kindOfAlgorithm);
                                 break;
                             }
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }).start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -252,23 +253,24 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create the array fill it up with Doubles
      * divide it into pieces accordingly of the device number
+     *
      * @param arrayLength The initial array to be divided and calculated
      */
-    private void executeSumOfDoubleNumbers(int arrayLength){
+    private void executeSumOfDoubleNumbers(int arrayLength) {
         new Thread(() -> {
             double[] createArray = SumUtils.randomDoubles(arrayLength);
             long startTime = System.nanoTime();
             mapClients = MappingSum.putArray(mapClients, createArray);
             mapClients = MappingSum.putTime(mapClients, startTime);
             for (ReadWrite i : readWrites) {
-                try{
-                    for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()){
-                        if(pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())){
+                try {
+                    for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()) {
+                        if (pair.getKey().equals(i.clientSocket.getInetAddress().getHostAddress())) {
                             i.writeDoubles(SEND_THE_ARRAY_TO_CLIENTS, pair.getValue().getChunkedArray(), kindOfCalculation, kindOfAlgorithm);
                             break;
                         }
                     }
-                }catch (IOException io){
+                } catch (IOException io) {
                     io.printStackTrace();
                 }
             }
@@ -329,15 +331,15 @@ public class MainActivity extends AppCompatActivity {
             //find the ip address of the server
             final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
 
-                //Server side
-            if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
+            //Server side
+            if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
                 dataMining.setVisibility(View.VISIBLE);
                 connectionStatus.setText("I am the Server");
                 toolbar.setVisibility(View.VISIBLE);
                 new Thread((new Server(MainActivity.this, SERVER_PORT))).start();
 
                 //client side
-            }else if(wifiP2pInfo.groupFormed){
+            } else if (wifiP2pInfo.groupFormed) {
                 connectionStatus.setText("I am the Client");
                 toolbar.setVisibility(View.GONE);
                 new Thread(new Client(groupOwnerAddress, SERVER_PORT, MainActivity.this)).start();
@@ -351,13 +353,13 @@ public class MainActivity extends AppCompatActivity {
      * Because of the api this could take and 1 minute
      * to final discover the device that has been off the network
      */
-    private void deletePeersOnDisconnection(){
+    private void deletePeersOnDisconnection() {
         try {
             int counter;
             if (mapClients.size() > Constants.deviceArray.length && Constants.deviceArray.length != 0) {
                 Iterator<Map.Entry<String, ClientModel>> mapClientIterator = mapClients.entrySet().iterator();
                 outer:
-                while(mapClientIterator.hasNext()){
+                while (mapClientIterator.hasNext()) {
                     Map.Entry<String, ClientModel> i = mapClientIterator.next();
                     counter = 0;
                     for (WifiP2pDevice device : Constants.deviceArray) {
@@ -367,9 +369,9 @@ public class MainActivity extends AppCompatActivity {
                                 if (counter == Constants.deviceArray.length) { //εαν ισχυει η συσκεύη δεν βρεθηκε
                                     mapClientIterator.remove(); //και θα διαγραφει απο την λίστα μας
                                     Iterator<ReadWrite> readWriteIterator = readWrites.iterator();
-                                    while(readWriteIterator.hasNext()){
+                                    while (readWriteIterator.hasNext()) {
                                         ReadWrite k = readWriteIterator.next();
-                                        if(k.clientSocket.getInetAddress().getHostAddress().equals(i.getValue().getClientIp())){
+                                        if (k.clientSocket.getInetAddress().getHostAddress().equals(i.getValue().getClientIp())) {
                                             readWriteIterator.remove();
                                             Constants.result = 0;
                                             break outer;
@@ -381,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        }catch (ConcurrentModificationException ce){
+        } catch (ConcurrentModificationException ce) {
             ce.printStackTrace();
         }
     }
@@ -410,13 +412,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.calculations){
+        if (id == R.id.calculations) {
             chooseKindOfCalculation();
             return true;
-        }else if(id == R.id.algorithms){
+        } else if (id == R.id.algorithms) {
             chooseKindOfAlgorithm();
             return true;
-        }else if(id == R.id.arrayLength){
+        } else if (id == R.id.arrayLength) {
             chooseLengthOfTheArray();
             return true;
         }
@@ -426,12 +428,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Dynamic choose of calculation
      */
-    private void chooseKindOfCalculation(){
-        CharSequence[] values = {" Serial "," Concurrent ", " Parallel" };
+    private void chooseKindOfCalculation() {
+        CharSequence[] values = {" Serial ", " Concurrent ", " Parallel"};
         AlertDialog.Builder calculator = new AlertDialog.Builder(MainActivity.this);
         calculator.setTitle("Choose Type Of Calculation");
         calculator.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
-            switch (item){
+            switch (item) {
                 case 0:
                     kindOfCalculation = "Serial";
                     break;
@@ -451,12 +453,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Dynamic choose of algorithm to use
      */
-    private void chooseKindOfAlgorithm(){
-        CharSequence[] values = {" Sum of Doubles "," Count Primes "};
+    private void chooseKindOfAlgorithm() {
+        CharSequence[] values = {" Sum of Doubles ", " Count Primes "};
         AlertDialog.Builder algorithm = new AlertDialog.Builder(MainActivity.this);
         algorithm.setTitle("Choose Type Of Calculation");
         algorithm.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
-            switch (item){
+            switch (item) {
                 case 0:
                     kindOfAlgorithm = "Doubles";
                     break;
@@ -473,13 +475,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Dynamic choose the length of the array
      */
-    private void chooseLengthOfTheArray(){
+    private void chooseLengthOfTheArray() {
         AlertDialog.Builder seekBuilder = new AlertDialog.Builder(MainActivity.this);
         seekBuilder.setTitle("Please Choose Array Length");
         LinearLayout linear = new LinearLayout(this);
         linear.setOrientation(LinearLayout.VERTICAL);
         final TextView text = new TextView(this);
-        text.setPadding(300,200,10,10);
+        text.setPadding(300, 200, 10, 10);
         text.setTypeface(null, Typeface.BOLD);
         text.setTextSize(25);
         final SeekBar seekBar = new SeekBar(this);

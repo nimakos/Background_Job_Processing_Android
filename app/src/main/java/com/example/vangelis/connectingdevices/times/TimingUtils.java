@@ -14,9 +14,9 @@ public class TimingUtils {
         long endTime = System.nanoTime();
         //System.out.println(resultMessage);
         Log.e("FORK_JOIN RESULT : ", resultMessage);
-        double elapsedSeconds = (endTime - startTime)/ONE_BILLION;
+        double elapsedSeconds = (endTime - startTime) / ONE_BILLION;
         //System.out.printf("Elapsed time: %.3f seconds.%n", elapsedSeconds);
-        String resultMessage2 = String.format(Locale.ENGLISH,"elapsed time is %.3f seconds.%n", elapsedSeconds);
+        String resultMessage2 = String.format(Locale.ENGLISH, "elapsed time is %.3f seconds.%n", elapsedSeconds);
         Log.e("FORK_JOIN RESULT : ", resultMessage2);
 
         return resultMessage2;

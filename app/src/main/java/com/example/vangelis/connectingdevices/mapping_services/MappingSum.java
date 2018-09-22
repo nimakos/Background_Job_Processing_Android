@@ -21,21 +21,22 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
 
 public class MappingSum extends Service {
 
-    public static double [] arrayToCalculate;
+    public static double[] arrayToCalculate;
 
     /**
      * Create the array for processing and putting it into the hasMap for each client of hashMap
-     * @param mp The hashMap
+     *
+     * @param mp          The hashMap
      * @param createArray The array for process
      * @return The final hashMap
      */
-    public static Map<String, ClientModel> putArray(Map<String, ClientModel> mp, double [] createArray){
+    public static Map<String, ClientModel> putArray(Map<String, ClientModel> mp, double[] createArray) {
         Iterator<Map.Entry<String, ClientModel>> it = mp.entrySet().iterator();
         int j = 0;
         while (it.hasNext()) {
             Map.Entry<String, ClientModel> pair = it.next();
             //Στρογγυλοποίηση προς τα πάνω (το μέγεθος του πίνακα που έχουμε προς τον αριθμό των clients) μας δίνει τον αριθμό των στοιχείων που θα έχει ο κάθε πίνακας
-            int chunk = (int)Math.ceil((double)createArray.length / (mp.size()));
+            int chunk = (int) Math.ceil((double) createArray.length / (mp.size()));
             double[] one = ChunkSum.oneArray(createArray, chunk, j);
             j++;
             pair.getValue().setChunkedArray(one);
@@ -45,11 +46,12 @@ public class MappingSum extends Service {
 
     /**
      * Put the time in hashMap for each client to know when the background job has been started
-     * @param mp The hashMap
+     *
+     * @param mp   The hashMap
      * @param time The startTime
      * @return The final hashMap with the started time
      */
-    public static Map<String, ClientModel> putTime(Map<String, ClientModel> mp, long time){
+    public static Map<String, ClientModel> putTime(Map<String, ClientModel> mp, long time) {
         for (Map.Entry<String, ClientModel> pair : mp.entrySet()) {
             pair.getValue().setStartTime(time);
         }
@@ -59,10 +61,11 @@ public class MappingSum extends Service {
 
     /**
      * Calculate and measure the time
+     *
      * @param arr The array to be calculated
      * @return The double result from the calculation
      */
-    public static double efficientCalculation(double [] arr, String kindOfCalculation){
+    public static double efficientCalculation(double[] arr, String kindOfCalculation) {
         final double[] clientResult = new double[1];
         switch (kindOfCalculation) {
             case "Serial": {
@@ -118,7 +121,7 @@ public class MappingSum extends Service {
             bundle.putDouble("message", result);
             receiver.send(SUM, bundle);
 
-        }catch (NullPointerException np){
+        } catch (NullPointerException np) {
             np.printStackTrace();
         }
         return Service.START_STICKY;

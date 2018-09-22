@@ -37,25 +37,25 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // Check to see if Wi-Fi p2p is enabled and notify appropriate activity
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 
-            if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
+            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
                 Toast.makeText(context, "Wifi is ON", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(context, "Wifi is OFF",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Wifi is OFF", Toast.LENGTH_SHORT).show();
             }
 
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Call WifiP2pManager.requestPeers() to get a list of current peers
-            if(mManager != null){
+            if (mManager != null) {
                 mManager.requestPeers(mChannel, mActivity.peerListListener);
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
-            if(mManager == null){
+            if (mManager == null) {
                 return;
             }
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
-            if(networkInfo.isConnected()){
+            if (networkInfo.isConnected()) {
                 mManager.requestConnectionInfo(mChannel, mActivity.connectionInfoListener);
 
                 //the connected device sends back the results to the main activity
@@ -63,10 +63,10 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 i.putExtra("name", myName);
                 i.putExtra("address", myMac);
                 context.sendBroadcast(i);
-            }else{
-                if(myName != null){
+            } else {
+                if (myName != null) {
                     mActivity.connectionStatus.setText(myName + " (Device Disconnected)");
-                }else{
+                } else {
                     mActivity.connectionStatus.setText("Device Disconnected");
                 }
                 mActivity.connectionStatus2.setText("No IP found");

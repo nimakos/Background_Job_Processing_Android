@@ -22,14 +22,15 @@ public class Message {
     private List<ReadWrite> readWrites;
     private MainActivity context;
 
-    public Message(String ipFromClient, List<ReadWrite> readWrites, MainActivity context){
+    public Message(String ipFromClient, List<ReadWrite> readWrites, MainActivity context) {
         this.context = context;
         this.readWrites = readWrites;
         this.ipFromClient = ipFromClient;
     }
+
     @SuppressWarnings("unchecked")
-    public void displayMessage(int resultCode, Bundle resultData){
-        if(resultCode == PRIME) {
+    public void displayMessage(int resultCode, Bundle resultData) {
+        if (resultCode == PRIME) {
             long result = resultData.getLong("message");
             String holeMessage = resultData.getString("holeMessage");
             updateTextView(holeMessage);
@@ -42,7 +43,7 @@ public class Message {
                     }
                 }
             }).start();
-        }else if(resultCode == SUM){
+        } else if (resultCode == SUM) {
             double result = resultData.getDouble("message");
             String holeMessage = resultData.getString("holeMessage");
             updateTextView(holeMessage);
@@ -58,7 +59,7 @@ public class Message {
         }
     }
 
-    private void updateTextView(String message){
+    private void updateTextView(String message) {
         TextView txtView = context.findViewById(R.id.connectionStatus2);
         txtView.setVisibility(View.VISIBLE);
         txtView.setTextSize(14);
