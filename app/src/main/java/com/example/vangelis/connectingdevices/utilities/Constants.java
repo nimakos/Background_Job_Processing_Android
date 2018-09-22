@@ -31,4 +31,6 @@ public class Constants {
     public static int arrayLength = 0;
     public static final int PRIME = 1;
     public static final int SUM = 2;
+
+    public static int COUNTER_PEERS = 0;
 }

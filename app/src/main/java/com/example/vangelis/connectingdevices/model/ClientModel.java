@@ -11,18 +11,23 @@ public class ClientModel implements Serializable {
     private String serverIp, deviceName, deviceMacAddress, clientIp;
     private int serverPort, clientPort;
     private double resultFromSumArray;
-    private double [] chunkedArray;
+    private double[] chunkedArray;
     private boolean hasCompleteTheJob;
     private long startTime, endTime;
     private static final double ONE_BILLION = 1_000_000_000;
     private double elapsedSeconds;
-    private int [] primeChunkedArray;
+    private int[] primeChunkedArray;
     private long primeResultFromSumArray;
 
-    public ClientModel(){}
+    public ClientModel() {
+    }
 
-    public double getElapsedSeconds(){
+    public double getElapsedSeconds() {
         return this.elapsedSeconds;
+    }
+
+    public void setElapsedSeconds(double elapsedSeconds) {
+        this.elapsedSeconds = elapsedSeconds;
     }
 
     public double getStartTime() {
@@ -39,15 +44,15 @@ public class ClientModel implements Serializable {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-        this.elapsedSeconds = (endTime - this.startTime)/ONE_BILLION;
+        this.elapsedSeconds = (endTime - this.startTime) / ONE_BILLION;
     }
 
-    public String getClientIp(){
+    public String getClientIp() {
         return clientIp;
     }
 
-    public void setClientIp(Socket socket){
-        String [] clientIpAddress = socket.getInetAddress().toString().split("/");
+    public void setClientIp(Socket socket) {
+        String[] clientIpAddress = socket.getInetAddress().toString().split("/");
         this.clientIp = clientIpAddress[1];
     }
 
@@ -72,11 +77,11 @@ public class ClientModel implements Serializable {
         return deviceName;
     }
 
-    public void setDeviceName(WifiP2pDevice [] wifiP2pDevice, List<String> deviceAddress) {
+    public void setDeviceName(WifiP2pDevice[] wifiP2pDevice, List<String> deviceAddress) {
         //απο την mac address βρισκω το ονομα του κινητου και αρα ποιο κινητο εκανε σύνδεση
-        for(WifiP2pDevice j : wifiP2pDevice){
-            for(String i : deviceAddress){
-                if(j.deviceAddress.equals(i)){ //εαν ταυτίζονται πάει να πεί οτι η συγκεκριμένη συσκεύη έχει κάνει connection
+        for (WifiP2pDevice j : wifiP2pDevice) {
+            for (String i : deviceAddress) {
+                if (j.deviceAddress.equals(i)) { //εαν ταυτίζονται πάει να πεί οτι η συγκεκριμένη συσκεύη έχει κάνει connection
                     this.deviceName = j.deviceName;
                     break;
                 }
@@ -88,9 +93,9 @@ public class ClientModel implements Serializable {
         return deviceMacAddress;
     }
 
-    public void setDeviceMacAddress(WifiP2pDevice [] wifiP2pDevice, List<String> deviceAddress) {
-        for(WifiP2pDevice j : wifiP2pDevice){
-            for(String i : deviceAddress) {
+    public void setDeviceMacAddress(WifiP2pDevice[] wifiP2pDevice, List<String> deviceAddress) {
+        for (WifiP2pDevice j : wifiP2pDevice) {
+            for (String i : deviceAddress) {
                 if (j.deviceAddress.equals(i)) { //εαν ταυτίζονται πάει να πεί οτι η συγκεκριμένη συσκεύη έχει κάνει connection
                     this.deviceMacAddress = j.deviceAddress;
                     //Log.e("Mac Address", this.deviceMacAddress);

@@ -99,106 +99,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_bar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.calculations){
-            chooseKindOfCalculation();
-            return true;
-        }else if(id == R.id.algorithms){
-            chooseKindOfAlgorithm();
-            return true;
-        }else if(id == R.id.arrayLength){
-            chooseLengthOfTheArray();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void chooseKindOfCalculation(){
-        CharSequence[] values = {" Serial "," Concurrent ", " Parallel" };
-        AlertDialog.Builder calculator = new AlertDialog.Builder(MainActivity.this);
-        calculator.setTitle("Choose Type Of Calculation");
-        calculator.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
-            switch (item){
-                case 0:
-                    kindOfCalculation = "Serial";
-                    break;
-                case 1:
-                    kindOfCalculation = "Concurrent";
-                    break;
-                case 2:
-                    kindOfCalculation = "Parallel";
-                    break;
-            }
-        });
-        calculator.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
-        calculator.create();
-        calculator.show();
-    }
-
-    private void chooseKindOfAlgorithm(){
-        CharSequence[] values = {" Sum of Doubles "," Count Primes "};
-        AlertDialog.Builder algorithm = new AlertDialog.Builder(MainActivity.this);
-        algorithm.setTitle("Choose Type Of Calculation");
-        algorithm.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
-            switch (item){
-                case 0:
-                    kindOfAlgorithm = "Doubles";
-                    break;
-                case 1:
-                    kindOfAlgorithm = "Primes";
-                    break;
-            }
-        });
-        algorithm.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
-        algorithm.create();
-        algorithm.show();
-    }
-
-    private void chooseLengthOfTheArray(){
-        AlertDialog.Builder seekBuilder = new AlertDialog.Builder(MainActivity.this);
-        seekBuilder.setTitle("Please Choose Array Length");
-        LinearLayout linear = new LinearLayout(this);
-        linear.setOrientation(LinearLayout.VERTICAL);
-        final TextView text = new TextView(this);
-        text.setPadding(300,200,10,10);
-        text.setTypeface(null, Typeface.BOLD);
-        text.setTextSize(25);
-        final SeekBar seekBar = new SeekBar(this);
-        seekBar.setMax(30_000_000);
-        seekBar.setKeyProgressIncrement(1);
-        linear.addView(seekBar);
-        linear.addView(text);
-        seekBuilder.setView(linear);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                text.setText(String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(progress)));
-                arrayLength = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        seekBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-        seekBuilder.create();
-        seekBuilder.show();
-    }
-
     /**
      * The buttons of the main activity
      */
@@ -284,6 +184,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Initialize the OnCreate method
+     */
+    private void initialWork() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Connecting Devices");
+
+        btnOnOff = findViewById(R.id.onOff);
+        btnDiscover = findViewById(R.id.discover);
+        chatButton = findViewById(R.id.sendButton);
+        listView = findViewById(R.id.peerListView);
+        read_msg_box = findViewById(R.id.readMsg);
+        connectionStatus = findViewById(R.id.connectionStatus);
+        connectionStatus2 = findViewById(R.id.connectionStatus2);
+        dataMining = findViewById(R.id.doSomething);
+        writeMsg = findViewById(R.id.writeMsg);
+
+        //This class provides the API for managing WI-FI connectivity
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        //This class provides the API for managing WI-FI peer-to-peer connectivity
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        //A channel that connects the application to the WI-FI p2p framework
+        mChannel = mManager.initialize(this, getMainLooper(), null);
+        //create an object from the class i made
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        //Create Intent to pass the parameters to WifiDirectBroadcastReceiver class(Activity)
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MAIN"));
+    }
+
+    /**
      * Create the array fill it up with integers
      * divide it into pieces accordingly of the device number
      * @param arrayLength The initial array to be divided and calculated
@@ -337,39 +273,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
-    }
-
-    private void initialWork() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Connecting Devices");
-
-        btnOnOff = findViewById(R.id.onOff);
-        btnDiscover = findViewById(R.id.discover);
-        chatButton = findViewById(R.id.sendButton);
-        listView = findViewById(R.id.peerListView);
-        read_msg_box = findViewById(R.id.readMsg);
-        connectionStatus = findViewById(R.id.connectionStatus);
-        connectionStatus2 = findViewById(R.id.connectionStatus2);
-        dataMining = findViewById(R.id.doSomething);
-        writeMsg = findViewById(R.id.writeMsg);
-
-        //This class provides the API for managing WI-FI connectivity
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        //This class provides the API for managing WI-FI peer-to-peer connectivity
-        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        //A channel that connects the application to the WI-FI p2p framework
-        mChannel = mManager.initialize(this, getMainLooper(), null);
-        //create an object from the class i made
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-        //Create Intent to pass the parameters to WifiDirectBroadcastReceiver class(Activity)
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
-        registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MAIN"));
     }
 
     /**
@@ -496,5 +399,114 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(mReceiver);
         unregisterReceiver(broadcastReceiver);
         mManager.removeGroup(mChannel, null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.calculations){
+            chooseKindOfCalculation();
+            return true;
+        }else if(id == R.id.algorithms){
+            chooseKindOfAlgorithm();
+            return true;
+        }else if(id == R.id.arrayLength){
+            chooseLengthOfTheArray();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Dynamic choose of calculation
+     */
+    private void chooseKindOfCalculation(){
+        CharSequence[] values = {" Serial "," Concurrent ", " Parallel" };
+        AlertDialog.Builder calculator = new AlertDialog.Builder(MainActivity.this);
+        calculator.setTitle("Choose Type Of Calculation");
+        calculator.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
+            switch (item){
+                case 0:
+                    kindOfCalculation = "Serial";
+                    break;
+                case 1:
+                    kindOfCalculation = "Concurrent";
+                    break;
+                case 2:
+                    kindOfCalculation = "Parallel";
+                    break;
+            }
+        });
+        calculator.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+        calculator.create();
+        calculator.show();
+    }
+
+    /**
+     * Dynamic choose of algorithm to use
+     */
+    private void chooseKindOfAlgorithm(){
+        CharSequence[] values = {" Sum of Doubles "," Count Primes "};
+        AlertDialog.Builder algorithm = new AlertDialog.Builder(MainActivity.this);
+        algorithm.setTitle("Choose Type Of Calculation");
+        algorithm.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
+            switch (item){
+                case 0:
+                    kindOfAlgorithm = "Doubles";
+                    break;
+                case 1:
+                    kindOfAlgorithm = "Primes";
+                    break;
+            }
+        });
+        algorithm.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+        algorithm.create();
+        algorithm.show();
+    }
+
+    /**
+     * Dynamic choose the length of the array
+     */
+    private void chooseLengthOfTheArray(){
+        AlertDialog.Builder seekBuilder = new AlertDialog.Builder(MainActivity.this);
+        seekBuilder.setTitle("Please Choose Array Length");
+        LinearLayout linear = new LinearLayout(this);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        final TextView text = new TextView(this);
+        text.setPadding(300,200,10,10);
+        text.setTypeface(null, Typeface.BOLD);
+        text.setTextSize(25);
+        final SeekBar seekBar = new SeekBar(this);
+        seekBar.setMax(30_000_000);
+        seekBar.setKeyProgressIncrement(1);
+        linear.addView(seekBar);
+        linear.addView(text);
+        seekBuilder.setView(linear);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                text.setText(String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(progress)));
+                arrayLength = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        seekBuilder.create();
+        seekBuilder.show();
     }
 }

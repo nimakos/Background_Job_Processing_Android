@@ -33,7 +33,7 @@ public class Server implements Runnable {
     private int SERVER_PORT;
     private MainActivity context;
 
-    public Server(MainActivity context, int port){
+    public Server(MainActivity context, int port) {
         this.SERVER_PORT = port;
         this.context = context;
     }
@@ -44,14 +44,14 @@ public class Server implements Runnable {
             serverSocket = new ServerSocket();
             serverSocket.setReuseAddress(true);
             serverSocket.bind(new InetSocketAddress(SERVER_PORT));
-        }catch (BindException be){
+        } catch (BindException be) {
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Socket clientSocket;
-        try{
-            while(!Thread.currentThread().isInterrupted()) {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
                 clientSocket = this.serverSocket.accept();
                 clientSocket.setTcpNoDelay(true);
 
@@ -68,22 +68,22 @@ public class Server implements Runnable {
                     }
                 }
             }
-        }catch (NullPointerException ne){
+        } catch (NullPointerException ne) {
             ne.printStackTrace();
-        }catch (IOException e) {
-            try{
-                if(serverSocket != null){
+        } catch (IOException e) {
+            try {
+                if (serverSocket != null) {
                     serverSocket.close();
                 }
-            }catch (IOException io){
+            } catch (IOException io) {
                 e.printStackTrace();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void initializeClients(Socket clientSocket){
+    private void initializeClients(Socket clientSocket) {
         ClientModel clientModel = new ClientModel();
         clientModel.setServerIp(clientSocket);
         clientModel.setClientPort(clientSocket);
@@ -92,18 +92,18 @@ public class Server implements Runnable {
         clientModel.setServerPort(clientSocket);
         clientModel.setClientIp(clientSocket);
         int clientPort = clientSocket.getPort();
-        String [] clientIpAddress = clientSocket.getInetAddress().toString().split("/");
+        String[] clientIpAddress = clientSocket.getInetAddress().toString().split("/");
         mapClients.put(clientIpAddress[1], clientModel); //putting all the clients into a hash list
         clientCounter++;
-        if(clientCounter == 1){
+        if (clientCounter == 1) {
             information += "\n" + "Connected IP : " + clientIpAddress[1] + ":" + clientPort + "\n";
-        }else if(clientCounter > 1){
+        } else if (clientCounter > 1) {
             information += "Connected IP : " + clientIpAddress[1] + ":" + clientPort + "\n";
         }
         context.runOnUiThread(() -> updateTextView(information));
     }
 
-    private void updateTextView(String message){
+    private void updateTextView(String message) {
         TextView txtView = context.findViewById(R.id.connectionStatus2);
         txtView.setVisibility(View.VISIBLE);
         txtView.setText(message);

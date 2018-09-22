@@ -22,22 +22,24 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
 
 public class MappingPrimes extends Service {
 
-    public static int [] arrayToCalculate;
+    public static int[] arrayToCalculate;
     public static String holleMessage;
     public static String time;
+
     /**
      * Create the array for processing and putting it into the hasMap for each client of hashMap
-     * @param mp The hashMap
+     *
+     * @param mp          The hashMap
      * @param createArray The array for process
      * @return The final hashMap
      */
-    public static Map<String, ClientModel> putPrimeArray(Map<String, ClientModel> mp, int [] createArray){
+    public static Map<String, ClientModel> putPrimeArray(Map<String, ClientModel> mp, int[] createArray) {
         Iterator<Map.Entry<String, ClientModel>> it = mp.entrySet().iterator();
         int j = 0;
         while (it.hasNext()) {
             Map.Entry<String, ClientModel> pair = it.next();
             //Στρογγυλοποίηση προς τα πάνω (το μέγεθος του πίνακα που έχουμε προς τον αριθμό των clients) μας δίνει τον αριθμό των στοιχείων που θα έχει ο κάθε πίνακας
-            int chunk = (int)Math.ceil((double)createArray.length / (mp.size()));
+            int chunk = (int) Math.ceil((double) createArray.length / (mp.size()));
             int[] one = ChunkPrimes.onePrimeArray(createArray, chunk, j);
             j++;
             pair.getValue().setPrimeChunkedArray(one);
@@ -47,11 +49,12 @@ public class MappingPrimes extends Service {
 
     /**
      * Put the time in hashMap for each client to know when the background job has been started
-     * @param mp The hashMap
+     *
+     * @param mp   The hashMap
      * @param time The startTime
      * @return The final hashMap with the started time
      */
-    public static Map<String, ClientModel> putTime(Map<String, ClientModel> mp, long time){
+    public static Map<String, ClientModel> putTime(Map<String, ClientModel> mp, long time) {
         for (Map.Entry<String, ClientModel> pair : mp.entrySet()) {
             pair.getValue().setStartTime(time);
         }
@@ -60,15 +63,16 @@ public class MappingPrimes extends Service {
 
     /**
      * Calculate and measure the time
+     *
      * @param arr The array to be calculated
      * @return The long result from the calculation
      */
-    public static long efficientCalculation(int [] arr, String kindOfCalculation){
+    public static long efficientCalculation(int[] arr, String kindOfCalculation) {
         final long[] clientResult = new long[1];
-        switch (kindOfCalculation){
+        switch (kindOfCalculation) {
             case "Serial": {
                 String messageForLong = "Serial Count of %,d prime numbers is %d and ";
-                time =  TimingUtils.timeOp(new Op() {
+                time = TimingUtils.timeOp(new Op() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public String runOp() {
@@ -115,16 +119,16 @@ public class MappingPrimes extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-             String kindOfCalculation = intent.getStringExtra("kindOfCalculation");
-             long result = efficientCalculation(arrayToCalculate, kindOfCalculation);
+            String kindOfCalculation = intent.getStringExtra("kindOfCalculation");
+            long result = efficientCalculation(arrayToCalculate, kindOfCalculation);
 
-             //pass the result back
-             ResultReceiver receiver = intent.getParcelableExtra("receiver");
-             Bundle bundle = new Bundle();
-             bundle.putLong("message", result);
-             bundle.putString("holeMessage", holleMessage);
-             receiver.send(PRIME, bundle);
-        }catch (NullPointerException np){
+            //pass the result back
+            ResultReceiver receiver = intent.getParcelableExtra("receiver");
+            Bundle bundle = new Bundle();
+            bundle.putLong("message", result);
+            bundle.putString("holeMessage", holleMessage);
+            receiver.send(PRIME, bundle);
+        } catch (NullPointerException np) {
             np.printStackTrace();
         }
         return Service.START_STICKY;

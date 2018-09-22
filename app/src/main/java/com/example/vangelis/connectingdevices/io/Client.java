@@ -24,7 +24,7 @@ public class Client implements Runnable {
     private int serverPort;
     private MainActivity context;
 
-    public Client(InetAddress hostAddress, int serverPort, MainActivity context){
+    public Client(InetAddress hostAddress, int serverPort, MainActivity context) {
         this.context = context;
         hostAdd = hostAddress.getHostAddress();
         clientSocket = new Socket();
@@ -49,11 +49,11 @@ public class Client implements Runnable {
             for (ReadWrite j : readWrites) {
                 j.writeObject(SEND_DEVICE_MAC_TO_SERVER, deviceMacAddresses);
             }
-        }catch (IOException e) {
-            if(clientSocket != null){
-                try{
+        } catch (IOException e) {
+            if (clientSocket != null) {
+                try {
                     clientSocket.close();
-                }catch (IOException io){
+                } catch (IOException io) {
                     io.printStackTrace();
                 }
             }
