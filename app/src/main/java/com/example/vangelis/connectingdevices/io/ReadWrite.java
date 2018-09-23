@@ -317,7 +317,6 @@ public class ReadWrite implements Runnable {
                         notification(finalMessage);
                         for (Map.Entry<String, ClientModel> pair1 : mp.entrySet()) {
                             if (pair1.getValue().getHasCompleteTheJob()) {
-                                //pair1.getValue().setHasCompleteTheJob(false);
                                 pair1.getValue().setElapsedSeconds(0.0);
                                 pair1.getValue().setPrimeResultFromSumArray(0);
                             }
