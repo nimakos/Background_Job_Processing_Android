@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
-import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
+import static com.example.vangelis.connectingdevices.constans.Constants.deviceMacAddresses;
+import static com.example.vangelis.connectingdevices.constans.Constants.hasSendMacAddress;
 
 public class Read implements Runnable {
 

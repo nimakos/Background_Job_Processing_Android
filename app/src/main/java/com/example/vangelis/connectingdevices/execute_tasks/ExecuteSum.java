@@ -5,7 +5,7 @@ import android.support.annotation.RequiresApi;
 
 import com.example.vangelis.connectingdevices.tasks.ConcurrentArraySumDoubles;
 import com.example.vangelis.connectingdevices.tasks.ParallelArraySumDoubles;
-import com.example.vangelis.connectingdevices.utilities.SumUtils;
+import com.example.vangelis.connectingdevices.calculations.SumUtils;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.DoubleStream;

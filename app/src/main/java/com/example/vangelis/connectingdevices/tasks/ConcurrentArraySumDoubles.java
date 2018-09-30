@@ -1,6 +1,6 @@
 package com.example.vangelis.connectingdevices.tasks;
 
-import com.example.vangelis.connectingdevices.utilities.SumUtils;
+import com.example.vangelis.connectingdevices.calculations.SumUtils;
 
 import java.util.ArrayList;
 import java.util.List;

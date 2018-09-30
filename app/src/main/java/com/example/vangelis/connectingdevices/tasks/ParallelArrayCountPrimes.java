@@ -1,6 +1,6 @@
 package com.example.vangelis.connectingdevices.tasks;
 
-import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
+import com.example.vangelis.connectingdevices.calculations.PrimeUtils;
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelArrayCountPrimes extends RecursiveTask<Long> {

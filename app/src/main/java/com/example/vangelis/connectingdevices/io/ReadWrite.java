@@ -23,18 +23,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.CHAT_MESSAGE;
-import static com.example.vangelis.connectingdevices.utilities.Constants.COUNTER_PEERS;
-import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_RESULT_BACK_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
-import static com.example.vangelis.connectingdevices.utilities.Constants.hasSendMacAddress;
-import static com.example.vangelis.connectingdevices.utilities.Constants.mapClients;
-import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
-import static com.example.vangelis.connectingdevices.utilities.Constants.result;
+import static com.example.vangelis.connectingdevices.constans.Constants.CHAT_MESSAGE;
+import static com.example.vangelis.connectingdevices.constans.Constants.COUNTER_PEERS;
+import static com.example.vangelis.connectingdevices.constans.Constants.PRIME;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_DEVICE_MAC_TO_SERVER;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_RESULT_BACK_TO_SERVER;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_THE_ARRAY_TO_CLIENTS;
+import static com.example.vangelis.connectingdevices.constans.Constants.SUM;
+import static com.example.vangelis.connectingdevices.constans.Constants.deviceMacAddresses;
+import static com.example.vangelis.connectingdevices.constans.Constants.hasSendMacAddress;
+import static com.example.vangelis.connectingdevices.constans.Constants.mapClients;
+import static com.example.vangelis.connectingdevices.constans.Constants.readWrites;
+import static com.example.vangelis.connectingdevices.constans.Constants.result;
 
 /**
  * Socket is the endpoint of a two way communication link

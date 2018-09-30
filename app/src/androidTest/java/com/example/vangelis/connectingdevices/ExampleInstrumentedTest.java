@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.example.vangelis.connectingdevices.execute_tasks.ExecutePrimes;
 import com.example.vangelis.connectingdevices.times.Op;
 import com.example.vangelis.connectingdevices.times.TimingUtils;
-import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
+import com.example.vangelis.connectingdevices.calculations.PrimeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

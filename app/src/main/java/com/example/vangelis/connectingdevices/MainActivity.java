@@ -36,9 +36,9 @@ import com.example.vangelis.connectingdevices.mapping_services.MappingPrimes;
 import com.example.vangelis.connectingdevices.mapping_services.MappingSum;
 import com.example.vangelis.connectingdevices.model.ClientModel;
 import com.example.vangelis.connectingdevices.network.WiFiDirectBroadcastReceiver;
-import com.example.vangelis.connectingdevices.utilities.Constants;
-import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
-import com.example.vangelis.connectingdevices.utilities.SumUtils;
+import com.example.vangelis.connectingdevices.constans.Constants;
+import com.example.vangelis.connectingdevices.calculations.PrimeUtils;
+import com.example.vangelis.connectingdevices.calculations.SumUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -50,13 +50,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.CHAT_MESSAGE;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_THE_ARRAY_TO_CLIENTS;
-import static com.example.vangelis.connectingdevices.utilities.Constants.arrayLength;
-import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfAlgorithm;
-import static com.example.vangelis.connectingdevices.utilities.Constants.kindOfCalculation;
-import static com.example.vangelis.connectingdevices.utilities.Constants.mapClients;
-import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
+import static com.example.vangelis.connectingdevices.constans.Constants.CHAT_MESSAGE;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_THE_ARRAY_TO_CLIENTS;
+import static com.example.vangelis.connectingdevices.constans.Constants.arrayLength;
+import static com.example.vangelis.connectingdevices.constans.Constants.kindOfAlgorithm;
+import static com.example.vangelis.connectingdevices.constans.Constants.kindOfCalculation;
+import static com.example.vangelis.connectingdevices.constans.Constants.mapClients;
+import static com.example.vangelis.connectingdevices.constans.Constants.readWrites;
 
 public class MainActivity extends AppCompatActivity {
 

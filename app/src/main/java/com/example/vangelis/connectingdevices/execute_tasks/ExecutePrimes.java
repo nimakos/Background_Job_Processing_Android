@@ -2,7 +2,7 @@ package com.example.vangelis.connectingdevices.execute_tasks;
 
 import com.example.vangelis.connectingdevices.tasks.ConcurrentArrayCountPrimes;
 import com.example.vangelis.connectingdevices.tasks.ParallelArrayCountPrimes;
-import com.example.vangelis.connectingdevices.utilities.PrimeUtils;
+import com.example.vangelis.connectingdevices.calculations.PrimeUtils;
 
 import java.util.concurrent.ForkJoinPool;
 

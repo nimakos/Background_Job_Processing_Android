@@ -1,4 +1,4 @@
-package com.example.vangelis.connectingdevices.utilities;
+package com.example.vangelis.connectingdevices.constans;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 

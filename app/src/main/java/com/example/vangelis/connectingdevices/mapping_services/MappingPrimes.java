@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
+import static com.example.vangelis.connectingdevices.constans.Constants.PRIME;
 
 
 public class MappingPrimes extends Service {

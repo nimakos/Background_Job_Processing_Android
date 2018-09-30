@@ -8,9 +8,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_DEVICE_MAC_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.deviceMacAddresses;
-import static com.example.vangelis.connectingdevices.utilities.Constants.readWrites;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_DEVICE_MAC_TO_SERVER;
+import static com.example.vangelis.connectingdevices.constans.Constants.deviceMacAddresses;
+import static com.example.vangelis.connectingdevices.constans.Constants.readWrites;
 
 /**
  * Accepting the request from the Server, the client

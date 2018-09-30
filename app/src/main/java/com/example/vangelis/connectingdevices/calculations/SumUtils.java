@@ -1,4 +1,4 @@
-package com.example.vangelis.connectingdevices.utilities;
+package com.example.vangelis.connectingdevices.calculations;
 
 public class SumUtils {
 

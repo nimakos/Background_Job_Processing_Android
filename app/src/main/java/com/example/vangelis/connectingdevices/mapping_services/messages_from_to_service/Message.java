@@ -1,10 +1,8 @@
 package com.example.vangelis.connectingdevices.mapping_services.messages_from_to_service;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.vangelis.connectingdevices.MainActivity;
 import com.example.vangelis.connectingdevices.R;
@@ -13,9 +11,9 @@ import com.example.vangelis.connectingdevices.io.ReadWrite;
 import java.io.IOException;
 import java.util.List;
 
-import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SEND_RESULT_BACK_TO_SERVER;
-import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
+import static com.example.vangelis.connectingdevices.constans.Constants.PRIME;
+import static com.example.vangelis.connectingdevices.constans.Constants.SEND_RESULT_BACK_TO_SERVER;
+import static com.example.vangelis.connectingdevices.constans.Constants.SUM;
 
 public class Message {
     private String ipFromClient;
