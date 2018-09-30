@@ -1,6 +1,5 @@
 package com.example.vangelis.connectingdevices.mapping_services;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +10,10 @@ import android.support.annotation.Nullable;
 import com.example.vangelis.connectingdevices.chunck.ChunkPrimes;
 import com.example.vangelis.connectingdevices.execute_tasks.ExecutePrimes;
 import com.example.vangelis.connectingdevices.model.ClientModel;
-import com.example.vangelis.connectingdevices.times.Op;
 import com.example.vangelis.connectingdevices.times.TimingUtils;
 
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
@@ -23,7 +22,7 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.PRIME;
 public class MappingPrimes extends Service {
 
     public static int[] arrayToCalculate;
-    public static String holleMessage;
+    public static String wholeMessage;
     public static String time;
 
     /**
@@ -71,45 +70,33 @@ public class MappingPrimes extends Service {
         final long[] clientResult = new long[1];
         switch (kindOfCalculation) {
             case "Serial": {
-                String messageForLong = "Serial Count of %,d prime numbers is %d and ";
-                time = TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumSerial(arr);
-                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
-                        return (holleMessage);
-                    }
+                String messageForPrimes = "Serial Count of %,d prime numbers is %d and ";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecutePrimes.arrayOfPrimesSumSerial(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForPrimes, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
-                holleMessage += "\n" + time;
+                wholeMessage += "\n" + time;
                 break;
             }
             case "Concurrent": {
-                String messageForLong = "Concurrent sum of %,d prime numbers is %d and";
-                time = TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumConcurrent(arr);
-                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
-                        return (holleMessage);
-                    }
+                String messageForPrimes = "Concurrent sum of %,d prime numbers is %d and";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecutePrimes.arrayOfPrimesSumConcurrent(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForPrimes, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
-                holleMessage += "\n" + time;
+                wholeMessage += "\n" + time;
                 break;
             }
             case "Parallel": {
-                String messageForLong = "Parallel sum of %,d prime numbers is %d and";
-                time = TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecutePrimes.arrayOfPrimesSumParallel(arr);
-                        holleMessage = String.format(messageForLong, arr.length, clientResult[0]);
-                        return (holleMessage);
-                    }
+                String messageForPrimes = "Parallel sum of %,d prime numbers is %d and";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecutePrimes.arrayOfPrimesSumParallel(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForPrimes, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
-                holleMessage += "\n" + time;
+                wholeMessage += "\n" + time;
                 break;
             }
         }
@@ -126,7 +113,7 @@ public class MappingPrimes extends Service {
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putLong("message", result);
-            bundle.putString("holeMessage", holleMessage);
+            bundle.putString("holeMessage", wholeMessage);
             receiver.send(PRIME, bundle);
         } catch (NullPointerException np) {
             np.printStackTrace();

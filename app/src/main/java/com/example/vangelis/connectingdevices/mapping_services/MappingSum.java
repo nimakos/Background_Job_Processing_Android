@@ -1,6 +1,5 @@
 package com.example.vangelis.connectingdevices.mapping_services;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +10,10 @@ import android.support.annotation.Nullable;
 import com.example.vangelis.connectingdevices.chunck.ChunkSum;
 import com.example.vangelis.connectingdevices.execute_tasks.ExecuteSum;
 import com.example.vangelis.connectingdevices.model.ClientModel;
-import com.example.vangelis.connectingdevices.times.Op;
 import com.example.vangelis.connectingdevices.times.TimingUtils;
 
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
@@ -22,6 +21,8 @@ import static com.example.vangelis.connectingdevices.utilities.Constants.SUM;
 public class MappingSum extends Service {
 
     public static double[] arrayToCalculate;
+    public static String wholeMessage;
+    public static String time;
 
     /**
      * Create the array for processing and putting it into the hasMap for each client of hashMap
@@ -69,38 +70,29 @@ public class MappingSum extends Service {
         final double[] clientResult = new double[1];
         switch (kindOfCalculation) {
             case "Serial": {
-                String messageForLong = "Serial sum of %,d numbers is %,.4f.";
-                TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecuteSum.arraySum(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
-                    }
+                String messageForSum = "Serial sum of %,d numbers is %,.4f.";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecuteSum.arraySum(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
                 break;
             }
             case "Concurrent": {
-                String messageForLong = "Concurrent sum of %,d numbers is %,.4f.";
-                TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecuteSum.arraySumConcurrent(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
-                    }
+                String messageForSum = "Concurrent sum of %,d numbers is %,.4f.";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecuteSum.arraySumConcurrent(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
                 break;
             }
             case "Parallel": {
-                String messageForLong = "Parallel sum of %,d numbers is %,.4f.";
-                TimingUtils.timeOp(new Op() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public String runOp() {
-                        clientResult[0] = ExecuteSum.arraySumParallel(arr);
-                        return (String.format(messageForLong, arr.length, clientResult[0]));
-                    }
+                String messageForSum = "Parallel sum of %,d numbers is %,.4f.";
+                time = TimingUtils.timeOp(() -> {
+                    clientResult[0] = ExecuteSum.arraySumParallel(arr);
+                    wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
+                    return (wholeMessage);
                 });
                 break;
             }
@@ -119,8 +111,8 @@ public class MappingSum extends Service {
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putDouble("message", result);
+            bundle.putString("holeMessage", wholeMessage);
             receiver.send(SUM, bundle);
-
         } catch (NullPointerException np) {
             np.printStackTrace();
         }
