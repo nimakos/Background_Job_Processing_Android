@@ -17,6 +17,7 @@ import com.example.vangelis.connectingdevices.model.ClientModel;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
@@ -257,7 +258,7 @@ public class ReadWrite implements Runnable {
                 result += pair.getValue().getPrimeResultFromSumArray();
                 String deviceName = pair.getValue().getDeviceName();
                 double deviceTime = pair.getValue().getElapsedSeconds();
-                String finalMessage = "Device " + deviceName + " Has done " + String.valueOf(deviceTime) + " Sec " + " the result is " + String.valueOf(result);
+                String finalMessage = "Device " + deviceName + " Has done " + String.valueOf(BigDecimal.valueOf(deviceTime).setScale(3, BigDecimal.ROUND_HALF_UP)) + " Sec " + " the result is " + String.valueOf(result);
                 context.runOnUiThread(() -> updateToast(finalMessage));
                 break;
             }
@@ -286,7 +287,7 @@ public class ReadWrite implements Runnable {
                 result += pair.getValue().getResultFromSumArray();
                 String deviceName = pair.getValue().getDeviceName();
                 double deviceTime = pair.getValue().getElapsedSeconds();
-                String finalMessage = "Device " + deviceName + " Has done " + String.valueOf(deviceTime) + " Sec " + " the result is " + String.valueOf(result);
+                String finalMessage = "Device " + deviceName + " Has done " + String.valueOf(BigDecimal.valueOf(deviceTime).setScale(3, BigDecimal.ROUND_HALF_UP)) + " Sec " + " the result is " + String.valueOf(result);
                 context.runOnUiThread(() -> updateToast(finalMessage));
                 break;
             }

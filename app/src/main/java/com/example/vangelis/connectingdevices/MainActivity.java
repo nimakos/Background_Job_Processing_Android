@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create the array fill it up with integers
      * divide it into pieces accordingly of the device number
-     *
+     * and send it to each device
      * @param arrayLength The initial array to be divided and calculated
      */
     private void executePrimeNumbers(int arrayLength) {
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create the array fill it up with Doubles
      * divide it into pieces accordingly of the device number
-     *
+     * and send it to each device
      * @param arrayLength The initial array to be divided and calculated
      */
     private void executeSumOfDoubleNumbers(int arrayLength) {
