@@ -485,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
         text.setTypeface(null, Typeface.BOLD);
         text.setTextSize(25);
         final SeekBar seekBar = new SeekBar(this);
-        seekBar.setMax(30_000_000);
+        seekBar.setMax(10_000_000);
         seekBar.setKeyProgressIncrement(1);
         linear.addView(seekBar);
         linear.addView(text);

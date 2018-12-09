@@ -268,7 +268,7 @@ public class ReadWrite implements Runnable {
 
     /**
      * Update final table using Sum Algorithm
-     *
+     * and show Toast message
      * @param mp          Initial Table
      * @param ip          Client Ip
      * @param finalResult Result of doubles
@@ -297,7 +297,7 @@ public class ReadWrite implements Runnable {
 
     /**
      * Loop in the Final table and show the results (Of Primes) in the UI
-     *
+     * and show Toast message
      * @param mp Final table
      */
     private void finalPrimeMessage(Map<String, ClientModel> mp) {
@@ -331,7 +331,7 @@ public class ReadWrite implements Runnable {
 
     /**
      * Loop in the Final table and show the results (Of Sums) in the UI
-     *
+     * and show notification message
      * @param mp Final table
      */
     private void finalDoubleMessage(Map<String, ClientModel> mp) {
@@ -348,7 +348,7 @@ public class ReadWrite implements Runnable {
                     }
                     result += pair.getValue().getResultFromSumArray();
                     if (mp.size() == count) {
-                        String finalMessage = String.format(Locale.ENGLISH, "Total time taken calculating the sum of an integer array of doubles is %.3f seconds. \n And the sum result is %.3f", maxTime, result);
+                        String finalMessage = String.format(Locale.ENGLISH, "Total time taken calculating the sum of an array of doubles is %.3f seconds. \n And the sum result is %.3f", maxTime, result);
                         notification(finalMessage);
                         for (Map.Entry<String, ClientModel> pair1 : mp.entrySet()) {
                             if (pair1.getValue().getHasCompleteTheJob()) {

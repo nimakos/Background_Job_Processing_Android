@@ -111,7 +111,7 @@ public class MappingSum extends Service {
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putDouble("message", result);
-            bundle.putString("holeMessage", wholeMessage);
+            bundle.putString("holeMessage", wholeMessage + " and " + time);
             receiver.send(SUM, bundle);
         } catch (NullPointerException np) {
             np.printStackTrace();

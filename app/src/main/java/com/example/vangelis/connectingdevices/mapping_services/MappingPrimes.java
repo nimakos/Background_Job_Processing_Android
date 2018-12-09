@@ -113,7 +113,7 @@ public class MappingPrimes extends Service {
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putLong("message", result);
-            bundle.putString("holeMessage", wholeMessage);
+            bundle.putString("holeMessage", wholeMessage  + " and " + time);
             receiver.send(PRIME, bundle);
         } catch (NullPointerException np) {
             np.printStackTrace();
