@@ -76,6 +76,7 @@ public class MappingSum extends Service {
                     wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
                     return (wholeMessage);
                 });
+                wholeMessage += "\n" + time;
                 break;
             }
             case "Concurrent": {
@@ -85,6 +86,7 @@ public class MappingSum extends Service {
                     wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
                     return (wholeMessage);
                 });
+                wholeMessage += "\n" + time;
                 break;
             }
             case "Parallel": {
@@ -94,6 +96,7 @@ public class MappingSum extends Service {
                     wholeMessage = String.format(Locale.ENGLISH, messageForSum, arr.length, clientResult[0]);
                     return (wholeMessage);
                 });
+                wholeMessage += "\n" + time;
                 break;
             }
         }
@@ -111,7 +114,7 @@ public class MappingSum extends Service {
             ResultReceiver receiver = intent.getParcelableExtra("receiver");
             Bundle bundle = new Bundle();
             bundle.putDouble("message", result);
-            bundle.putString("holeMessage", wholeMessage + " and " + time);
+            bundle.putString("holeMessage", wholeMessage);
             receiver.send(SUM, bundle);
         } catch (NullPointerException np) {
             np.printStackTrace();
