@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
      * Dynamic choose of calculation
      */
     private void chooseKindOfCalculation() {
-        CharSequence[] values = {" Serial ", " Concurrent ", " Parallel"};
+        CharSequence[] values = {" Serial ", " Parallel_2 ", " Parallel"};
         AlertDialog.Builder calculator = new AlertDialog.Builder(MainActivity.this);
         calculator.setTitle("Choose Type Of Calculation");
         calculator.setSingleChoiceItems(values, -1, (dialogInterface, item) -> {
