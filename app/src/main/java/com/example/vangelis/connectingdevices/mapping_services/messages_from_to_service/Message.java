@@ -26,7 +26,6 @@ public class Message {
         this.ipFromClient = ipFromClient;
     }
 
-    @SuppressWarnings("unchecked")
     public void displayMessage(int resultCode, Bundle resultData) {
         if (resultCode == PRIME) {
             long result = resultData.getLong("message");

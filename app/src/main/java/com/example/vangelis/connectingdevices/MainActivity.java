@@ -230,8 +230,8 @@ public class MainActivity extends AppCompatActivity {
             new Thread(() -> {
                 int[] createPrimeArray = PrimeUtils.randomIntegers(arrayLength);
                 long startTime = System.nanoTime();
-                mapClients = MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
-                mapClients = MappingPrimes.putTime(mapClients, startTime);
+                MappingPrimes.putPrimeArray(mapClients, createPrimeArray);
+                MappingPrimes.putTime(mapClients, startTime);
                 for (ReadWrite i : readWrites) {
                     try {
                         for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()) {
@@ -260,8 +260,8 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             double[] createArray = SumUtils.randomDoubles(arrayLength);
             long startTime = System.nanoTime();
-            mapClients = MappingSum.putArray(mapClients, createArray);
-            mapClients = MappingSum.putTime(mapClients, startTime);
+            MappingSum.putArray(mapClients, createArray);
+            MappingSum.putTime(mapClients, startTime);
             for (ReadWrite i : readWrites) {
                 try {
                     for (Map.Entry<String, ClientModel> pair : mapClients.entrySet()) {
